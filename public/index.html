@@ -9,131 +9,220 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#eef1f4;--card:#fff;--ink:#172033;--muted:#5b667a;--line:#d9dee6;--accent:#2f4bd8;--ok:#0f7b5f;--err:#b42318;
---display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--body:"Hanken Grotesk","Segoe UI",system-ui,sans-serif}
+--display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--body:"Hanken Grotesk","Segoe UI",system-ui,sans-serif;--ease:cubic-bezier(.2,.7,.2,1)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--body)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 button,input,select,textarea{font:inherit;color:inherit}
-header{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--card);border-bottom:1px solid var(--line)}
-.brand{font:700 20px var(--display);letter-spacing:-.01em}
-.user{display:flex;align-items:center;gap:10px;color:var(--muted)}
-.user img{width:28px;height:28px;border-radius:50%}
 a{color:var(--accent)}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.brand{font:700 20px var(--display);letter-spacing:-.01em}
+.user{display:flex;align-items:center;gap:12px;color:var(--muted)}
+.user img{width:28px;height:28px;border-radius:50%}
 .btn{display:inline-block;border:1px solid var(--line);background:var(--card);padding:9px 16px;border-radius:8px;font-weight:600;cursor:pointer;text-decoration:none;color:var(--ink)}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .btn:disabled{opacity:.55;cursor:default}
 .gate{max-width:560px;margin:14vh auto;padding:0 24px}
 .gate h1{font:700 40px/1.1 var(--display);letter-spacing:-.02em;margin:0 0 12px}
 .gate p{color:var(--muted);margin:0 0 24px}
-.app{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 58px)}
-nav{padding:20px 14px;border-right:1px solid var(--line);background:var(--card)}
-nav h2{font-size:13px;color:var(--muted);font-weight:600;margin:0 10px 8px}
-nav button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;padding:8px 10px;border-radius:8px;text-align:left;cursor:pointer}
-nav button[aria-current=true]{background:var(--bg);font-weight:600}
-nav img,.ph{width:24px;height:24px;border-radius:50%;background:var(--line);flex:none}
-nav .add{margin-top:14px;font-size:14px;padding:0 10px;display:block}
+.app{display:grid;grid-template-columns:236px 1fr;min-height:calc(100vh - 58px)}
+nav{padding:18px 14px;border-right:1px solid var(--line);background:var(--card)}
+nav h2{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 10px 10px}
+.servers{display:flex;flex-wrap:wrap;gap:8px;padding:0 10px 18px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.sv{width:38px;height:38px;border-radius:50%;border:0;padding:0;background:var(--bg);display:grid;place-items:center;font-weight:700;cursor:pointer;overflow:hidden;box-shadow:0 0 0 2px transparent;transition:transform .2s var(--ease),box-shadow .2s}
+.sv img{width:100%;height:100%}
+.sv:hover{transform:scale(1.1)}
+.sv[aria-current=true]{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--accent)}
+#mods button{position:relative;display:block;width:100%;border:0;background:none;padding:9px 12px;border-radius:8px;text-align:left;cursor:pointer;font-weight:500;transition:background-color .15s,padding .2s var(--ease)}
+#mods button:hover{background:var(--bg);padding-left:16px}
+#mods button[aria-current=true]{background:var(--bg);font-weight:600}
+#mods button[aria-current=true]::before{content:"";position:absolute;left:-14px;top:8px;bottom:8px;width:3px;border-radius:2px;background:var(--accent)}
+nav .add{display:block;margin:18px 10px 0;font-size:14px}
 main{padding:28px;max-width:1180px;width:100%}
 main h1{font:700 28px var(--display);margin:0 0 4px;letter-spacing:-.01em}
 .sub{color:var(--muted);margin:0 0 24px}
-.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:28px;align-items:start}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px}
+.h2{font:700 18px var(--display);margin:26px 0 12px}
+.muted{color:var(--muted);margin:0}
+.hero{display:flex;gap:18px;align-items:center;padding:26px;border-radius:16px;color:#fff;background:linear-gradient(115deg,#2f4bd8,#6a3df0 55%,#0ea5a4);background-size:200% 200%;animation:flow 14s ease infinite,up .5s var(--ease) both}
+.hero .gi{width:64px;height:64px;border-radius:16px;background:rgba(255,255,255,.2);display:grid;place-items:center;font:700 28px var(--display);overflow:hidden;flex:none}
+.hero .gi img{width:100%;height:100%}
+.hero h1{color:#fff;margin:0}.hero p{margin:2px 0 0;opacity:.85}
+.stats,.mods{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:16px}
+.mods{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:0}
+.stat,.mod,.panel{background:var(--card);border:1px solid var(--line);border-radius:12px}
+.stat{padding:16px 18px}
+.stat b{display:block;font:700 28px var(--display)}
+.stat span{color:var(--muted);font-size:13px}
+.mod{padding:18px}
+.mod h3{margin:0;font:700 16px var(--display)}
+.mod p{color:var(--muted);margin:6px 0 14px}
+.rowb{display:flex;justify-content:space-between;align-items:center}
+.pill{font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;background:var(--bg);color:var(--muted)}
+.pill.on{background:#dcf5ec;color:var(--ok)}
+.panel{padding:20px;margin-bottom:16px}
 .panel h3{font:700 16px var(--display);margin:0 0 14px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;color:var(--muted);font-weight:600;padding:6px 8px}
+td{padding:9px 8px;border-top:1px solid var(--line)}
+dl{margin:0}dt{font:600 14px ui-monospace,Menlo,monospace;color:var(--accent);margin-top:10px}dt:first-child{margin-top:0}dd{margin:0;color:var(--muted);font-size:14px}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:28px;align-items:start}
 label{display:block;font-weight:600;font-size:14px;margin:14px 0 5px}
 label:first-of-type{margin-top:0}
 input[type=text],select,textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:#fff}
 textarea{resize:vertical;min-height:72px}
-.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.row>*{flex:1}
+.row{display:flex;gap:12px;align-items:center}.row>div{flex:1}
 .check{display:flex;gap:8px;align-items:center;font-weight:500;margin:12px 0 0}
 .check input{width:16px;height:16px;accent-color:var(--accent)}
 .switch{display:flex;justify-content:space-between;align-items:center;margin:0 0 16px}
 .switch input{appearance:none;width:40px;height:22px;border-radius:11px;background:var(--line);position:relative;cursor:pointer;transition:background .15s}
-.switch input::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .15s}
+.switch input::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s var(--ease)}
 .switch input:checked{background:var(--accent)}.switch input:checked::after{transform:translateX(18px)}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .chips button{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:2px 8px;font:13px ui-monospace,Menlo,monospace;cursor:pointer}
-input[type=color]{width:44px;height:38px;padding:2px;border:1px solid var(--line);border-radius:8px;flex:none;background:#fff}
+input[type=color]{width:44px;height:38px;padding:2px;border:1px solid var(--line);border-radius:8px;flex:none;background:#fff;margin-top:19px}
 .actions{display:flex;gap:10px;align-items:center}
-#status{font-size:14px}#status.ok{color:var(--ok)}#status.err{color:var(--err)}
-.sticky{position:sticky;top:20px}
+.sticky{position:sticky;top:78px}
 .pv-title{font-size:13px;color:var(--muted);font-weight:600;margin:0 0 8px}
 .dc{background:#313338;color:#dbdee1;border-radius:10px;padding:16px;font:15px/1.4 "Segoe UI",system-ui,sans-serif;display:flex;gap:12px}
 .dc .av{width:38px;height:38px;border-radius:50%;background:var(--accent);flex:none;display:grid;place-items:center;color:#fff;font-weight:700}
-.dc .meta{font-size:15px;font-weight:600;color:#fff}
+.dc .meta{font-weight:600;color:#fff}
 .dc .tag{background:#5865f2;color:#fff;font-size:10px;padding:1px 5px;border-radius:4px;margin:0 6px;vertical-align:1px}
 .dc .time{font-size:12px;color:#949ba4;font-weight:400}
 .mention{background:#3c4270;color:#c9cdfb;border-radius:3px;padding:0 2px}
-.emb{margin-top:6px;background:#2b2d31;border-left:4px solid #888;border-radius:4px;padding:10px 14px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;max-width:100%}
+.emb{margin-top:6px;background:#2b2d31;border-left:4px solid #888;border-radius:4px;padding:10px 14px;display:grid;grid-template-columns:1fr auto;gap:4px 12px}
 .emb>*{min-width:0}
-.emb .a{grid-column:1;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#fff}
+.emb .a{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#fff}
 .emb .a img,.emb .f img{width:22px;height:22px;border-radius:50%}
-.emb .t{grid-column:1;font-weight:700;color:#fff;font-size:16px}
-.emb .d{grid-column:1;font-size:14px;overflow-wrap:anywhere}
+.emb .t{font-weight:700;color:#fff;font-size:16px}.emb .d{font-size:14px;overflow-wrap:anywhere}
 .emb .th{grid-column:2;grid-row:1/4;width:72px;height:72px;border-radius:6px;object-fit:cover}
 .emb .f{grid-column:1/3;display:flex;align-items:center;gap:8px;font-size:12px;color:#b5bac1;margin-top:4px}
-.emb a{color:#00a8fc;text-decoration:none}
-.hide{display:none!important}
+.emb>:not(.th):not(.f){grid-column:1}
+.emb a{color:#00a8fc}
+.skel{height:90px;border-radius:12px;margin-bottom:14px;background:linear-gradient(90deg,#e3e7ec 25%,#f1f3f6 50%,#e3e7ec 75%);background-size:200% 100%;animation:sh 1.2s linear infinite}
+.toast{position:fixed;right:20px;bottom:20px;background:var(--ink);color:#fff;padding:11px 16px;border-radius:10px;box-shadow:0 8px 24px rgba(23,32,51,.25);z-index:9;animation:up .25s var(--ease) both}
+.toast.bad{background:var(--err)}.toast.out{opacity:0;transform:translateY(6px);transition:.4s}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes flow{0%,100%{background-position:0 50%}50%{background-position:100% 50%}}
+@keyframes sh{to{background-position:-200% 0}}
+.btn,.chips button,.panel,.mod,.stat,input,select,textarea{transition:background-color .15s,border-color .15s,box-shadow .2s,transform .2s var(--ease),color .15s}
+.btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 12px rgba(23,32,51,.12);border-color:#b8c0cd}
+.btn.primary:hover:not(:disabled){background:#2540c4;border-color:#2540c4;box-shadow:0 6px 16px rgba(47,75,216,.32)}
+.btn:active:not(:disabled){transform:none;box-shadow:none}
+.stat:hover,.mod:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(23,32,51,.09);border-color:#c3cad6}
+.panel:hover{border-color:#c3cad6;box-shadow:0 2px 10px rgba(23,32,51,.06)}
+input[type=text]:hover,select:hover,textarea:hover{border-color:#b8c0cd}
+input[type=text]:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,75,216,.15);outline:0}
+.chips button:hover{border-color:var(--accent);color:var(--accent);background:#fff;transform:translateY(-1px)}
+.user a:hover,nav .add:hover{text-decoration:underline}
+.gate>*,main>h1,main>.sub,.h2,main>.panel,.cols>div>*,.sticky{animation:up .5s var(--ease) both}
+.stat,.mod{animation:up .5s var(--ease) both;animation-delay:calc(var(--i,0)*60ms + 80ms)}
+.gate>:nth-child(2),main>.sub{animation-delay:.06s}.gate>:nth-child(3){animation-delay:.12s}
+.cols>div>:nth-child(2),.sticky{animation-delay:.12s}.cols>div>:nth-child(3){animation-delay:.18s}.cols>div>:nth-child(4){animation-delay:.24s}
 @media(max-width:900px){.app{grid-template-columns:1fr}nav{border-right:0;border-bottom:1px solid var(--line)}.cols{grid-template-columns:1fr}.sticky{position:static}main{padding:20px 16px}}
-@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 <header><span class="brand" id="brand">Dashboard</span><div class="user" id="user"></div></header>
 <div id="root"></div>
 <script>
-const $=s=>document.querySelector(s), root=$('#root');
+const $=s=>document.querySelector(s),root=$('#root');
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const md=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/__(.+?)__/g,'<u>$1</u>').replace(/\*(.+?)\*/g,'<i>$1</i>').replace(/\[(.+?)\]\((https?:\/\/[^\s)]+)\)/g,'<a>$1</a>').replace(/\n/g,'<br>');
 async function api(path,opt){const r=await fetch(path,opt&&{method:opt.method,headers:{'Content-Type':'application/json'},body:JSON.stringify(opt.body)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Something went wrong.');return j}
-let me,gid,cfg,data,last;
+const toast=(m,bad)=>{const t=document.createElement('div');t.className='toast'+(bad?' bad':'');t.textContent=m;t.setAttribute('role','status');document.body.append(t);setTimeout(()=>t.classList.add('out'),2600);setTimeout(()=>t.remove(),3100)};
+let me,gid,data,ov,view=location.hash.slice(1)||'overview',last;
+const VIEWS={overview:'Overview',welcome:'Welcome',moderation:'Moderation'};
+const chanOpts=sel=>`<option value="">Select a channel</option>`+data.channels.map(c=>`<option value="${c.id}"${c.id===sel?' selected':''}>#${esc(c.name)}</option>`).join('');
 
 (async function init(){
-  me=await api('/api/me');
-  document.title=me.botName+' dashboard';$('#brand').textContent=me.botName;
-  if(!me.user){
-    const err=location.search.includes('error');
-    root.innerHTML=`<section class="gate"><h1>Set up ${esc(me.botName)} for your server.</h1><p>${err?'Login failed. Try again.':'Sign in with Discord to manage welcome messages and more for servers you run.'}</p><a class="btn primary" href="/auth/login">Continue with Discord</a></section>`;return}
+  me=await api('/api/me');document.title=me.botName+' dashboard';$('#brand').textContent=me.botName;
+  if(!me.user){const err=location.search.includes('error');
+    root.innerHTML=`<section class="gate"><h1>Set up ${esc(me.botName)} for your server.</h1><p>${err?'Login failed. Try again.':'Sign in with Discord to manage welcome messages, moderation and more for servers you run.'}</p><a class="btn primary" href="/auth/login">Continue with Discord</a></section>`;return}
   $('#user').innerHTML=`${me.user.avatar?`<img src="${esc(me.user.avatar)}" alt="">`:''}<span>${esc(me.user.name)}</span><a href="/auth/logout">Log out</a>`;
-  if(!me.guilds.length){root.innerHTML=`<section class="gate"><h1>Add ${esc(me.botName)} to a server.</h1><p>You'll see servers here once the bot joins one where you have the Manage Server permission.</p><a class="btn primary" href="${esc(me.invite)}">Add to server</a></section>`;return}
-  root.innerHTML=`<div class="app"><nav><h2>Servers</h2><div id="guilds"></div><a class="add" href="${esc(me.invite)}">Add to another server</a></nav><main id="main"></main></div>`;
-  $('#guilds').innerHTML=me.guilds.map(g=>`<button data-id="${g.id}">${g.icon?`<img src="${esc(g.icon)}" alt="">`:'<span class="ph"></span>'}<span>${esc(g.name)}</span></button>`).join('');
-  $('#guilds').onclick=e=>{const b=e.target.closest('button');b&&open(b.dataset.id)};
-  open(me.guilds[0].id);
+  if(!me.guilds.length){root.innerHTML=`<section class="gate"><h1>Add ${esc(me.botName)} to a server.</h1><p>Servers appear here once the bot joins one where you have the Manage Server permission.</p><a class="btn primary" href="${esc(me.invite)}">Add to server</a></section>`;return}
+  root.innerHTML=`<div class="app"><nav><h2>Servers</h2><div class="servers" id="servers"></div><h2>Modules</h2><div id="mods"></div><a class="add" href="${esc(me.invite)}">Add to another server</a></nav><main id="main"></main></div>`;
+  $('#servers').innerHTML=me.guilds.map(g=>`<button class="sv" data-id="${g.id}" title="${esc(g.name)}" aria-label="${esc(g.name)}">${g.icon?`<img src="${esc(g.icon)}" alt="">`:esc(g.name[0])}</button>`).join('');
+  $('#mods').innerHTML=Object.entries(VIEWS).map(([k,v])=>`<button data-v="${k}">${v}</button>`).join('');
+  $('#servers').onclick=e=>{const b=e.target.closest('.sv');b&&pick(b.dataset.id)};
+  const m=$('#main');
+  m.onclick=e=>{const b=e.target.closest('[data-v]');b&&go(b.dataset.v)};
+  m.oninput=m.onchange=()=>view==='welcome'&&draw();
+  m.addEventListener('focusin',e=>{if(e.target.matches('input[type=text],textarea'))last=e.target});
+  $('#mods').onclick=e=>{const b=e.target.closest('button');b&&go(b.dataset.v)};
+  if(!VIEWS[view])view='overview';
+  pick(me.guilds[0].id);
 })();
 
-async function open(id){
-  gid=id;document.querySelectorAll('#guilds button').forEach(b=>b.setAttribute('aria-current',b.dataset.id===id));
-  data=await api('/api/guilds/'+id);cfg=data.welcome;const e=cfg.embed;
+async function pick(id){
+  gid=id;$('#main').innerHTML='<div class="skel"></div><div class="skel" style="height:140px"></div><div class="skel"></div>';
+  document.querySelectorAll('.sv').forEach(b=>b.setAttribute('aria-current',b.dataset.id===id));
+  try{[data,ov]=await Promise.all([api('/api/guilds/'+id),api(`/api/guilds/${id}/overview`)]);render()}
+  catch(e){$('#main').innerHTML=`<p class="muted">${esc(e.message)}</p>`}
+}
+function go(v){view=v;history.replaceState(null,'','#'+v);render()}
+function render(){
+  document.querySelectorAll('#mods button').forEach(b=>b.setAttribute('aria-current',b.dataset.v===view));
+  ({overview:Overview,welcome:Welcome,moderation:Moderation})[view]();scrollTo(0,0);
+}
+
+function Overview(){
+  const s=data.sample,w=data.welcome,m=ov.moderation;
+  const stats=[['Members',ov.memberCount],['Channels',ov.channelCount],['Roles',ov.roleCount],['Warnings issued',ov.warningCount]];
+  $('#main').innerHTML=`<section class="hero"><div class="gi">${s.icon?`<img src="${esc(s.icon)}" alt="">`:esc(s.server[0])}</div><div><h1>${esc(s.server)}</h1><p>Manage how ${esc(me.botName)} runs in this server.</p></div></section>
+  <div class="stats">${stats.map(([k,v],i)=>`<div class="stat" style="--i:${i}"><b data-n="${v}">0</b><span>${k}</span></div>`).join('')}</div>
+  <h2 class="h2">Modules</h2><div class="mods">
+   <article class="mod" style="--i:0"><div class="rowb"><h3>Welcome</h3><span class="pill ${w.enabled?'on':''}">${w.enabled?'On':'Off'}</span></div><p>Greet new members with a fully custom embed.</p><button class="btn" data-v="welcome">Configure</button></article>
+   <article class="mod" style="--i:1"><div class="rowb"><h3>Moderation</h3><span class="pill ${m.logChannelId?'on':''}">${m.logChannelId?'Logging on':'No log channel'}</span></div><p>Kick, ban, timeout and warn with a mod log.</p><button class="btn" data-v="moderation">Configure</button></article></div>
+  <h2 class="h2">Recent warnings</h2><div class="panel">${ov.warnings.length?`<table><tr><th>Member</th><th>Reason</th><th>By</th><th>Date</th></tr>${ov.warnings.map(r=>`<tr><td>${esc(r.user)}</td><td>${esc(r.reason)}</td><td>${esc(r.mod)}</td><td>${new Date(r.at).toLocaleDateString()}</td></tr>`).join('')}</table>`:'<p class="muted">No warnings yet. Use /warn in Discord to issue one.</p>'}</div>`;
+  const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  document.querySelectorAll('[data-n]').forEach(el=>{const n=+el.dataset.n;if(calm)return el.textContent=n.toLocaleString();const t0=performance.now();(function f(t){const p=Math.min((t-t0)/800,1);el.textContent=Math.round(n*(1-(1-p)**3)).toLocaleString();p<1&&requestAnimationFrame(f)})(t0)});
+}
+
+function Moderation(){
+  const m=ov.moderation;
+  $('#main').innerHTML=`<h1>Moderation</h1><p class="sub">Actions are run with slash commands in Discord and recorded in your log channel.</p>
+  <div class="cols"><div><div class="panel"><h3>Logging</h3><label for="log">Mod log channel</label><select id="log">${chanOpts(m.logChannelId)}</select>
+   <label class="check"><input type="checkbox" id="dm"${m.dm?' checked':''}>Send members a DM when they are kicked, banned, timed out or warned</label></div>
+   <div class="actions"><button class="btn primary" id="msave">Save changes</button></div></div>
+  <aside class="sticky"><div class="panel"><h3>Slash commands</h3><dl>
+   <dt>/warn</dt><dd>Record a warning for a member.</dd><dt>/warnings</dt><dd>Show a member's recent warnings.</dd>
+   <dt>/timeout</dt><dd>Mute a member for a set number of minutes.</dd><dt>/kick</dt><dd>Remove a member. They can rejoin.</dd><dt>/ban</dt><dd>Ban a member from the server.</dd></dl></div></aside></div>`;
+  $('#msave').onclick=async e=>{e.target.disabled=true;const body={logChannelId:$('#log').value,dm:$('#dm').checked};
+    try{await api(`/api/guilds/${gid}/moderation`,{method:'PUT',body});ov.moderation=body;toast('Moderation settings saved')}catch(x){toast(x.message,1)}e.target.disabled=false};
+}
+
+function Welcome(){
+  const e=data.welcome.embed,w=data.welcome;
   $('#main').innerHTML=`<h1>Welcome message</h1><p class="sub">Greet new members in ${esc(data.sample.server)}. The preview updates as you type.</p>
   <div class="cols"><div>
    <div class="panel"><label class="switch" for="enabled">Send a welcome message<input id="enabled" type="checkbox" role="switch"></label>
-    <label for="channelId">Channel</label><select id="channelId"><option value="">Select a channel</option>${data.channels.map(c=>`<option value="${c.id}">#${esc(c.name)}</option>`).join('')}</select></div>
+    <label for="channelId">Channel</label><select id="channelId">${chanOpts(w.channelId)}</select></div>
    <div class="panel"><h3>Message</h3><label for="content">Text above the embed</label><textarea id="content"></textarea>
     <div class="chips" aria-label="Insert placeholder">${['{user}','{username}','{server}','{memberCount}'].map(p=>`<button type="button" data-p="${p}">${p}</button>`).join('')}</div></div>
    <div class="panel"><h3>Embed</h3>
-    <div class="row"><div><label for="title">Title</label><input type="text" id="title"></div><input type="color" id="color" aria-label="Embed color" style="flex:none;margin-top:19px"></div>
+    <div class="row"><div><label for="title">Title</label><input type="text" id="title"></div><input type="color" id="color" aria-label="Embed color"></div>
     <label for="description">Description</label><textarea id="description" style="min-height:110px"></textarea>
     <label for="thumbnail">Thumbnail</label><select id="thumbnail"><option value="none">None</option><option value="user">Member avatar</option><option value="server">Server icon</option></select>
     <label for="footer">Footer</label><input type="text" id="footer">
     <label class="check"><input type="checkbox" id="author">Show member name and avatar at the top</label>
     <label class="check"><input type="checkbox" id="footerIcon">Show server icon in the footer</label>
     <label class="check"><input type="checkbox" id="timestamp">Show timestamp</label></div>
-   <div class="actions"><button class="btn primary" id="save">Save changes</button><button class="btn" id="test">Send test message</button><span id="status" role="status"></span></div>
+   <div class="actions"><button class="btn primary" id="save">Save changes</button><button class="btn" id="test">Send test message</button></div>
   </div><aside class="sticky"><p class="pv-title">Preview</p><div id="pv"></div></aside></div>`;
-  const f={enabled:cfg.enabled,channelId:cfg.channelId,content:cfg.content,...e};
+  const f={enabled:w.enabled,content:w.content,...e};
   for(const k in f){const el=$('#'+k);if(el)el.type==='checkbox'?el.checked=f[k]:el.value=f[k]}
   last=$('#content');
-  $('#main').addEventListener('focusin',ev=>{if(ev.target.matches('input[type=text],textarea'))last=ev.target});
-  $('#main').addEventListener('input',draw);$('#main').addEventListener('change',draw);
   $('.chips').onclick=ev=>{const p=ev.target.dataset.p;if(!p)return;const s=last.selectionStart??last.value.length;last.setRangeText(p,s,last.selectionEnd??s,'end');last.focus();draw()};
-  $('#save').onclick=()=>send('PUT','');$('#test').onclick=()=>send('POST','/test');draw();
+  $('#save').onclick=()=>send('PUT');$('#test').onclick=()=>send('POST');draw();
 }
 const read=()=>{const v=id=>{const el=$('#'+id);return el.type==='checkbox'?el.checked:el.value};
   return{enabled:v('enabled'),channelId:v('channelId'),content:v('content'),embed:{color:v('color'),author:v('author'),title:v('title'),description:v('description'),thumbnail:v('thumbnail'),footer:v('footer'),footerIcon:v('footerIcon'),timestamp:v('timestamp')}}};
-async function send(method,sub){
-  const st=$('#status'),btns=document.querySelectorAll('.actions .btn');btns.forEach(b=>b.disabled=true);st.className='';st.textContent='Working…';
-  try{await api(`/api/guilds/${gid}/welcome`+(method==='PUT'?'':sub),{method:method==='PUT'?'PUT':'POST',body:read()});st.className='ok';st.textContent=method==='PUT'?'Saved.':'Test message sent.'}
-  catch(e){st.className='err';st.textContent=e.message}
+async function send(method){
+  const btns=document.querySelectorAll('.actions .btn');btns.forEach(b=>b.disabled=true);
+  try{const body=read();await api(`/api/guilds/${gid}/welcome`+(method==='PUT'?'':'/test'),{method,body});
+    if(method==='PUT')data.welcome=body;toast(method==='PUT'?'Welcome settings saved':'Test message sent')}
+  catch(e){toast(e.message,1)}
   btns.forEach(b=>b.disabled=false);
 }
 function draw(){

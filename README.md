@@ -19,3 +19,7 @@ Copy `.env.example` to `.env`, fill it in, run `npm install && npm run dev`.
 
 ## Premium
 `guild_settings.premium` exists per server and is returned by the API. Gate premium features on it.
+
+## Moderation
+Slash commands `/kick`, `/ban`, `/timeout`, `/warn`, `/warnings` register themselves on startup (new commands can take a few minutes to appear). Choose the log channel in the dashboard. Fine-tune who can use them in Discord under Server Settings → Integrations.
+The bot's invite link now asks for Kick, Ban and Timeout permissions. If the bot is already in your server, re-invite it from the dashboard's "Add to another server" link, or tick those permissions on its role. The bot's role must also sit above the roles of members it moderates.
