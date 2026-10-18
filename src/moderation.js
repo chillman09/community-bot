@@ -1,3 +1,4 @@
+import { featureCommands } from './features.js';
 import { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits as P } from 'discord.js';
 
 const user = (c) => c.addUserOption((o) => o.setName('user').setDescription('Member').setRequired(true));
@@ -19,10 +20,10 @@ export const initModeration = (db) => db.query(`
   create index if not exists warnings_guild on warnings (guild_id, user_id)`);
 
 export function setupModeration(client, db) {
-  client.once('ready', () => client.application.commands.set(commands).catch((e) => console.error('command sync failed', e.message)));
+  client.once('ready', () => client.application.commands.set([...commands, ...featureCommands]).catch((e) => console.error('command sync failed', e.message)));
 
   client.on('interactionCreate', async (i) => {
-    if (!i.isChatInputCommand() || !i.inGuild()) return;
+    if (!i.isChatInputCommand() || !i.inGuild() || !commands.some((c) => c.name === i.commandName)) return;
     const fail = (m) => i.reply({ content: m, ephemeral: true });
     try {
       const target = i.options.getMember('user'), why = i.options.getString('reason') || 'No reason given', cmd = i.commandName;

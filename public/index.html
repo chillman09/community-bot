@@ -118,6 +118,11 @@ input[type=text]:focus,select:focus,textarea:focus{border-color:var(--accent);bo
 .stat,.mod{animation:up .5s var(--ease) both;animation-delay:calc(var(--i,0)*60ms + 80ms)}
 .gate>:nth-child(2),main>.sub{animation-delay:.06s}.gate>:nth-child(3){animation-delay:.12s}
 .cols>div>:nth-child(2),.sticky{animation-delay:.12s}.cols>div>:nth-child(3){animation-delay:.18s}.cols>div>:nth-child(4){animation-delay:.24s}
+input[type=number]{width:84px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:#fff;margin:0 4px}
+input[type=number]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,75,216,.15);outline:0}
+.pn{max-width:720px}.hint{color:var(--muted);font-size:13px;margin:8px 0 0}
+.rw{display:flex;gap:10px;align-items:center;margin-bottom:10px}.rw select{flex:1}.rw input{margin:0}.rw .btn{padding:8px 12px}
+main>.pn{animation:up .5s var(--ease) both}
 @media(max-width:900px){.app{grid-template-columns:1fr}nav{border-right:0;border-bottom:1px solid var(--line)}.cols{grid-template-columns:1fr}.sticky{position:static}main{padding:20px 16px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
 </style>
@@ -131,8 +136,8 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const md=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/__(.+?)__/g,'<u>$1</u>').replace(/\*(.+?)\*/g,'<i>$1</i>').replace(/\[(.+?)\]\((https?:\/\/[^\s)]+)\)/g,'<a>$1</a>').replace(/\n/g,'<br>');
 async function api(path,opt){const r=await fetch(path,opt&&{method:opt.method,headers:{'Content-Type':'application/json'},body:JSON.stringify(opt.body)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Something went wrong.');return j}
 const toast=(m,bad)=>{const t=document.createElement('div');t.className='toast'+(bad?' bad':'');t.textContent=m;t.setAttribute('role','status');document.body.append(t);setTimeout(()=>t.classList.add('out'),2600);setTimeout(()=>t.remove(),3100)};
-let me,gid,data,ov,view=location.hash.slice(1)||'overview',last;
-const VIEWS={overview:'Overview',welcome:'Welcome',moderation:'Moderation'};
+let me,gid,data,ov,mods,view=location.hash.slice(1)||'overview',last;
+const VIEWS={overview:'Overview',welcome:'Welcome',moderation:'Moderation',leveling:'Leveling',autoroles:'Auto-roles',antispam:'Anti-spam'};
 const chanOpts=sel=>`<option value="">Select a channel</option>`+data.channels.map(c=>`<option value="${c.id}"${c.id===sel?' selected':''}>#${esc(c.name)}</option>`).join('');
 
 (async function init(){
@@ -157,13 +162,13 @@ const chanOpts=sel=>`<option value="">Select a channel</option>`+data.channels.m
 async function pick(id){
   gid=id;$('#main').innerHTML='<div class="skel"></div><div class="skel" style="height:140px"></div><div class="skel"></div>';
   document.querySelectorAll('.sv').forEach(b=>b.setAttribute('aria-current',b.dataset.id===id));
-  try{[data,ov]=await Promise.all([api('/api/guilds/'+id),api(`/api/guilds/${id}/overview`)]);render()}
+  try{[data,ov,mods]=await Promise.all([api('/api/guilds/'+id),api(`/api/guilds/${id}/overview`),api(`/api/guilds/${id}/modules`)]);render()}
   catch(e){$('#main').innerHTML=`<p class="muted">${esc(e.message)}</p>`}
 }
 function go(v){view=v;history.replaceState(null,'','#'+v);render()}
 function render(){
   document.querySelectorAll('#mods button').forEach(b=>b.setAttribute('aria-current',b.dataset.v===view));
-  ({overview:Overview,welcome:Welcome,moderation:Moderation})[view]();scrollTo(0,0);
+  ({overview:Overview,welcome:Welcome,moderation:Moderation,leveling:Leveling,autoroles:AutoRoles,antispam:AntiSpam})[view]();scrollTo(0,0);
 }
 
 function Overview(){
@@ -173,7 +178,8 @@ function Overview(){
   <div class="stats">${stats.map(([k,v],i)=>`<div class="stat" style="--i:${i}"><b data-n="${v}">0</b><span>${k}</span></div>`).join('')}</div>
   <h2 class="h2">Modules</h2><div class="mods">
    <article class="mod" style="--i:0"><div class="rowb"><h3>Welcome</h3><span class="pill ${w.enabled?'on':''}">${w.enabled?'On':'Off'}</span></div><p>Greet new members with a fully custom embed.</p><button class="btn" data-v="welcome">Configure</button></article>
-   <article class="mod" style="--i:1"><div class="rowb"><h3>Moderation</h3><span class="pill ${m.logChannelId?'on':''}">${m.logChannelId?'Logging on':'No log channel'}</span></div><p>Kick, ban, timeout and warn with a mod log.</p><button class="btn" data-v="moderation">Configure</button></article></div>
+   <article class="mod" style="--i:1"><div class="rowb"><h3>Moderation</h3><span class="pill ${m.logChannelId?'on':''}">${m.logChannelId?'Logging on':'No log channel'}</span></div><p>Kick, ban, timeout and warn with a mod log.</p><button class="btn" data-v="moderation">Configure</button></article>
+   ${[['leveling','Leveling','XP, ranks and role rewards for active members.'],['autoroles','Auto-roles','Give new members roles automatically.'],['antispam','Anti-spam','Time out members who flood the chat.']].map(([k,t,d],i)=>`<article class="mod" style="--i:${i+2}"><div class="rowb"><h3>${t}</h3><span class="pill ${mods.modules[k].enabled?'on':''}">${mods.modules[k].enabled?'On':'Off'}</span></div><p>${d}</p><button class="btn" data-v="${k}">Configure</button></article>`).join('')}</div>
   <h2 class="h2">Recent warnings</h2><div class="panel">${ov.warnings.length?`<table><tr><th>Member</th><th>Reason</th><th>By</th><th>Date</th></tr>${ov.warnings.map(r=>`<tr><td>${esc(r.user)}</td><td>${esc(r.reason)}</td><td>${esc(r.mod)}</td><td>${new Date(r.at).toLocaleDateString()}</td></tr>`).join('')}</table>`:'<p class="muted">No warnings yet. Use /warn in Discord to issue one.</p>'}</div>`;
   const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
   document.querySelectorAll('[data-n]').forEach(el=>{const n=+el.dataset.n;if(calm)return el.textContent=n.toLocaleString();const t0=performance.now();(function f(t){const p=Math.min((t-t0)/800,1);el.textContent=Math.round(n*(1-(1-p)**3)).toLocaleString();p<1&&requestAnimationFrame(f)})(t0)});
@@ -190,6 +196,42 @@ function Moderation(){
    <dt>/timeout</dt><dd>Mute a member for a set number of minutes.</dd><dt>/kick</dt><dd>Remove a member. They can rejoin.</dd><dt>/ban</dt><dd>Ban a member from the server.</dd></dl></div></aside></div>`;
   $('#msave').onclick=async e=>{e.target.disabled=true;const body={logChannelId:$('#log').value,dm:$('#dm').checked};
     try{await api(`/api/guilds/${gid}/moderation`,{method:'PUT',body});ov.moderation=body;toast('Moderation settings saved')}catch(x){toast(x.message,1)}e.target.disabled=false};
+}
+
+
+const roleOpts=sel=>'<option value="">Select a role</option>'+mods.roles.map(r=>`<option value="${r.id}"${r.id===sel?' selected':''}>${esc(r.name)}${r.ok?'':' (above the bot)'}</option>`).join('');
+const sw=(id,label,on)=>`<label class="switch" for="${id}">${label}<input id="${id}" type="checkbox" role="switch"${on?' checked':''}></label>`;
+async function saveMod(name,body,btn){btn.disabled=true;try{await api(`/api/guilds/${gid}/modules/${name}`,{method:'PUT',body});mods.modules[name]=body;toast('Saved')}catch(e){toast(e.message,1)}btn.disabled=false}
+
+function Leveling(){
+  const c=mods.modules.leveling;let rw=c.rewards.map(r=>({...r}));
+  $('#main').innerHTML=`<h1>Leveling</h1><p class="sub">Members earn XP by chatting (once a minute) and level up. They can check progress with /rank and /leaderboard.</p>
+  <div class="panel pn">${sw('en','Enable leveling',c.enabled)}<label for="ch">Level-up announcements</label><select id="ch"><option value="">In the channel where they chatted</option>${data.channels.map(x=>`<option value="${x.id}"${x.id===c.channelId?' selected':''}>#${esc(x.name)}</option>`).join('')}</select>
+   <label for="msg">Message</label><textarea id="msg">${esc(c.message)}</textarea><p class="hint">Use {user} and {level}.</p></div>
+  <div class="panel pn"><h3>Role rewards</h3><div id="rw"></div><button class="btn" id="add">Add reward</button></div>
+  <div class="actions pn" style="margin-bottom:8px"><button class="btn primary" id="sv">Save changes</button></div>
+  <h2 class="h2">Top members</h2><div class="panel pn">${mods.leaders.length?`<table>${mods.leaders.map((r,i)=>`<tr><td>#${i+1}</td><td>${esc(r.name)}</td><td>Level ${r.level}</td><td>${r.xp.toLocaleString()} XP</td></tr>`).join('')}</table>`:'<p class="muted">No XP earned yet.</p>'}</div>`;
+  const rows=()=>{$('#rw').innerHTML=rw.map((r,i)=>`<div class="rw"><span>Level</span><input type="number" min="1" max="200" value="${r.level}" data-i="${i}" aria-label="Level"><select data-i="${i}" aria-label="Role">${roleOpts(r.roleId)}</select><button class="btn" data-x="${i}" aria-label="Remove reward">&times;</button></div>`).join('')||'<p class="muted">No rewards yet.</p>'};
+  $('#rw').onchange=$('#rw').oninput=e=>{const i=e.target.dataset.i;if(i==null)return;e.target.matches('input')?rw[i].level=+e.target.value:rw[i].roleId=e.target.value};
+  $('#rw').onclick=e=>{const x=e.target.dataset.x;if(x!=null){rw.splice(+x,1);rows()}};
+  $('#add').onclick=()=>{if(rw.length<10){rw.push({level:5,roleId:''});rows()}};
+  $('#sv').onclick=e=>saveMod('leveling',{enabled:$('#en').checked,channelId:$('#ch').value,message:$('#msg').value,rewards:rw.filter(r=>r.roleId)},e.target);
+  rows();
+}
+function AutoRoles(){
+  const c=mods.modules.autoroles;
+  $('#main').innerHTML=`<h1>Auto-roles</h1><p class="sub">Give new members these roles the moment they join.</p>
+  <div class="panel pn">${sw('en','Enable auto-roles',c.enabled)}<h3>Roles</h3>${mods.roles.map(r=>`<label class="check"><input type="checkbox" value="${r.id}"${c.roleIds.includes(r.id)?' checked':''}${r.ok?'':' disabled'}>${esc(r.name)}${r.ok?'':' (above the bot)'}</label>`).join('')||'<p class="muted">No roles to assign.</p>'}
+   <p class="hint">Drag the bot's role above these roles in Server Settings &rarr; Roles so it can assign them.</p></div>
+  <div class="actions pn"><button class="btn primary" id="sv">Save changes</button></div>`;
+  $('#sv').onclick=e=>saveMod('autoroles',{enabled:$('#en').checked,roleIds:[...document.querySelectorAll('.panel .check input:checked')].map(x=>x.value)},e.target);
+}
+function AntiSpam(){
+  const c=mods.modules.antispam;
+  $('#main').innerHTML=`<h1>Anti-spam</h1><p class="sub">Automatically time out members who flood a channel. Members with Manage Messages are ignored.</p>
+  <div class="panel pn">${sw('en','Enable anti-spam',c.enabled)}<p style="margin:0">Time out anyone who sends <input type="number" id="n" min="3" max="20" value="${c.messages}"> messages within <input type="number" id="s" min="2" max="30" value="${c.seconds}"> seconds, for <input type="number" id="t" min="1" max="60" value="${c.timeoutMinutes}"> minutes.</p></div>
+  <div class="actions pn"><button class="btn primary" id="sv">Save changes</button></div>`;
+  $('#sv').onclick=e=>saveMod('antispam',{enabled:$('#en').checked,messages:+$('#n').value,seconds:+$('#s').value,timeoutMinutes:+$('#t').value},e.target);
 }
 
 function Welcome(){

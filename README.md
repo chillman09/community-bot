@@ -23,3 +23,9 @@ Copy `.env.example` to `.env`, fill it in, run `npm install && npm run dev`.
 ## Moderation
 Slash commands `/kick`, `/ban`, `/timeout`, `/warn`, `/warnings` register themselves on startup (new commands can take a few minutes to appear). Choose the log channel in the dashboard. Fine-tune who can use them in Discord under Server Settings → Integrations.
 The bot's invite link now asks for Kick, Ban and Timeout permissions. If the bot is already in your server, re-invite it from the dashboard's "Add to another server" link, or tick those permissions on its role. The bot's role must also sit above the roles of members it moderates.
+
+## Leveling, auto-roles, anti-spam
+- **Leveling:** XP once a minute per member, `/rank` and `/leaderboard`, level-up messages and role rewards (set in the dashboard). Level n needs 100 x n squared XP.
+- **Auto-roles:** roles given on join.
+- **Anti-spam:** times out members who send too many messages too fast. Staff with Manage Messages are ignored.
+These need the **Manage Roles** permission. Re-invite the bot from the dashboard, or tick it on the bot's role, and keep the bot's role above any role it hands out.
