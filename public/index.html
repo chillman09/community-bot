@@ -128,6 +128,59 @@ input[type=number]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(47
 .pn{max-width:720px}.hint{color:var(--muted);font-size:13px;margin:8px 0 0}
 .rw{display:flex;gap:10px;align-items:center;margin-bottom:10px}.rw select{flex:1}.rw input{margin:0}.rw .btn{padding:8px 12px}
 main>.pn{animation:up .5s var(--ease) both}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+*{scrollbar-width:thin;scrollbar-color:var(--hov) transparent}
+header{transition:background-color .3s,box-shadow .3s}
+header.scrolled{background:color-mix(in srgb,var(--card) 78%,transparent);backdrop-filter:saturate(1.4) blur(14px);box-shadow:0 8px 28px rgba(10,16,30,.08)}
+header::after{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:100%;background:linear-gradient(90deg,var(--accent),#a06bff,#0ea5a4);transform:scaleX(var(--p,0));transform-origin:0 50%}
+.grp{font-size:12px;font-weight:600;color:var(--muted);margin:16px 12px 4px}
+.rv{opacity:0;transform:translateY(22px) scale(.985);transition:opacity .7s var(--ease),transform .7s var(--ease),translate .25s var(--ease),box-shadow .2s,border-color .15s,background-color .15s;transition-delay:calc(var(--d,0)*70ms),calc(var(--d,0)*70ms),0s,0s,0s,0s}
+.rv.in{opacity:1;transform:none}
+main .rv.rv{animation:none}
+.stat:hover,.mod:hover{transform:none;translate:0 -4px}
+.stat,.mod{position:relative;overflow:hidden}
+.stat>*,.mod>*{position:relative}
+.stat::before,.mod::before{content:"";position:absolute;inset:0;background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--accent) 17%,transparent),transparent 70%);opacity:0;transition:opacity .3s;pointer-events:none}
+.stat:hover::before,.mod:hover::before{opacity:1}
+.hero{position:relative;overflow:hidden}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;filter:blur(42px);opacity:.5;pointer-events:none;animation:drift 9s ease-in-out infinite alternate}
+.hero::before{width:220px;height:220px;right:-40px;top:-70px;background:#ffd36b}
+.hero::after{width:180px;height:180px;right:170px;bottom:-100px;background:#4de0d0;animation-delay:-4s}
+.hero>*{position:relative;z-index:1}
+.hero .gi{transform:translateY(calc(var(--sy,0)*-.05px))}
+.switch input::after{transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.check input:checked{animation:ck .28s var(--ease)}
+.btn{position:relative;overflow:hidden}
+.rip{position:absolute;border-radius:50%;background:rgba(255,255,255,.38);transform:scale(0);animation:rip .6s var(--ease);pointer-events:none}
+@keyframes drift{to{transform:translate(-34px,20px) scale(1.18)}}
+@keyframes ck{50%{transform:scale(1.3)}}
+@keyframes rip{to{transform:scale(1);opacity:0}}
+@keyframes pop{from{opacity:0;transform:scale(.7)}}
+@keyframes drop{from{opacity:0;transform:translateY(-6px) scaleY(.96)}}
+.cb{position:relative}
+.cb-btn{width:100%;min-height:42px;display:flex;align-items:center;text-align:left;border:1px solid var(--line);border-radius:8px;padding:6px 38px 6px 10px;background:var(--field);cursor:pointer;position:relative}
+.cb-btn:hover{border-color:var(--hov)}
+.cb.open .cb-btn{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+.cb-ar{position:absolute;right:15px;top:50%;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);transition:transform .25s var(--ease)}
+.cb.open .cb-ar{transform:translateY(-30%) rotate(225deg)}
+.cb-chips{display:flex;flex-wrap:wrap;gap:6px;max-height:88px;overflow:auto}
+.chip{display:inline-flex;align-items:center;gap:4px;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent);border-radius:99px;padding:2px 10px;font-size:13px;font-weight:600;animation:pop .25s var(--ease)}
+.chip i{font-style:normal;cursor:pointer;width:18px;height:18px;margin-right:-6px;border-radius:50%;display:grid;place-items:center}
+.chip i:hover{background:var(--accent);color:#fff}
+.cb-ph{color:var(--muted)}
+.cb-pop{position:absolute;z-index:30;left:0;right:0;top:calc(100% + 6px);background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 18px 44px rgba(10,16,30,.2);padding:8px;animation:drop .18s var(--ease);transform-origin:top}
+.cb-q{margin-bottom:6px}
+.cb-list{list-style:none;margin:0;padding:0;max-height:240px;overflow:auto}
+.cb-list li{padding:8px 10px;border-radius:6px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;transition:background-color .12s,padding .15s var(--ease)}
+.cb-list li:hover{background:var(--bg);padding-left:14px}
+.cb-list li[aria-selected=true]{background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);font-weight:600}
+.cb-list li[aria-selected=true]::after{content:"\2713"}
+.cb-list li[aria-disabled=true]{opacity:.45;cursor:not-allowed}
+.cb-list li[aria-disabled=true]:hover{background:none;padding-left:10px}
+.cb-list .none{color:var(--muted);cursor:default}
+.rw .cb{flex:1}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}}
 @media(max-width:900px){.app{grid-template-columns:1fr}nav{border-right:0;border-bottom:1px solid var(--line)}.cols{grid-template-columns:1fr}.sticky{position:static}main{padding:20px 16px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
 </style>
@@ -145,7 +198,8 @@ const md=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/__(.+?)__/g,'<
 async function api(path,opt){const r=await fetch(path,opt&&{method:opt.method,headers:{'Content-Type':'application/json'},body:JSON.stringify(opt.body)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Something went wrong.');return j}
 const toast=(m,bad)=>{const t=document.createElement('div');t.className='toast'+(bad?' bad':'');t.textContent=m;t.setAttribute('role','status');document.body.append(t);setTimeout(()=>t.classList.add('out'),2600);setTimeout(()=>t.remove(),3100)};
 let me,gid,data,ov,mods,view=location.hash.slice(1)||'overview',last;
-const VIEWS={overview:'Overview',welcome:'Welcome',moderation:'Moderation',leveling:'Leveling',autoroles:'Auto-roles',antispam:'Anti-spam',security:'Security',commands:'Commands'};
+const VIEWS={overview:'Overview',welcome:'Welcome',goodbye:'Goodbye',leveling:'Leveling',autoroles:'Auto-roles',panel:'Role panel',moderation:'Moderation',antispam:'Anti-spam',security:'Security',logs:'Server logs',commands:'Commands'};
+const GROUPS=[['Server',['overview','welcome','goodbye']],['Community',['leveling','autoroles','panel']],['Protection',['moderation','antispam','security','logs']],['Bot',['commands']]];
 const chanOpts=sel=>`<option value="">Select a channel</option>`+data.channels.map(c=>`<option value="${c.id}"${c.id===sel?' selected':''}>#${esc(c.name)}</option>`).join('');
 
 (async function init(){
@@ -156,7 +210,7 @@ const chanOpts=sel=>`<option value="">Select a channel</option>`+data.channels.m
   if(!me.guilds.length){root.innerHTML=`<section class="gate"><h1>Add ${esc(me.botName)} to a server.</h1><p>Servers appear here once the bot joins one where you have the Manage Server permission.</p><a class="btn primary" href="${esc(me.invite)}">Add to server</a></section>`;return}
   root.innerHTML=`<div class="app"><nav><h2>Servers</h2><div class="servers" id="servers"></div><h2>Modules</h2><div id="mods"></div><a class="add" href="${esc(me.invite)}">Add to another server</a></nav><main id="main"></main></div>`;
   $('#servers').innerHTML=me.guilds.map(g=>`<button class="sv" data-id="${g.id}" title="${esc(g.name)}" aria-label="${esc(g.name)}">${g.icon?`<img src="${esc(g.icon)}" alt="">`:esc(g.name[0])}</button>`).join('');
-  $('#mods').innerHTML=Object.entries(VIEWS).map(([k,v])=>`<button data-v="${k}">${v}</button>`).join('');
+  $('#mods').innerHTML=GROUPS.map(([t,ks])=>`<div class="grp">${t}</div>`+ks.map(k=>`<button data-v="${k}">${VIEWS[k]}</button>`).join('')).join('');
   $('#servers').onclick=e=>{const b=e.target.closest('.sv');b&&pick(b.dataset.id)};
   const m=$('#main');
   m.onclick=e=>{const b=e.target.closest('[data-v]');b&&go(b.dataset.v)};
@@ -176,7 +230,7 @@ async function pick(id){
 function go(v){view=v;history.replaceState(null,'','#'+v);render()}
 function render(){
   document.querySelectorAll('#mods button').forEach(b=>b.setAttribute('aria-current',b.dataset.v===view));
-  ({overview:Overview,welcome:Welcome,moderation:Moderation,leveling:Leveling,autoroles:AutoRoles,antispam:AntiSpam,security:SecurityView,commands:CommandsView})[view]();scrollTo(0,0);
+  ({overview:Overview,welcome:Welcome,moderation:Moderation,leveling:Leveling,autoroles:AutoRoles,antispam:AntiSpam,security:SecurityView,commands:CommandsView,goodbye:GoodbyeView,logs:LogsView,panel:PanelView})[view]();scrollTo({top:0,behavior:'instant'});fx();
 }
 
 function Overview(){
@@ -187,7 +241,7 @@ function Overview(){
   <h2 class="h2">Modules</h2><div class="mods">
    <article class="mod" style="--i:0"><div class="rowb"><h3>Welcome</h3><span class="pill ${w.enabled?'on':''}">${w.enabled?'On':'Off'}</span></div><p>Greet new members with a fully custom embed.</p><button class="btn" data-v="welcome">Configure</button></article>
    <article class="mod" style="--i:1"><div class="rowb"><h3>Moderation</h3><span class="pill ${m.logChannelId?'on':''}">${m.logChannelId?'Logging on':'No log channel'}</span></div><p>Kick, ban, timeout and warn with a mod log.</p><button class="btn" data-v="moderation">Configure</button></article>
-   ${[['leveling','Leveling','XP, ranks and role rewards for active members.'],['autoroles','Auto-roles','Give new members roles automatically.'],['antispam','Anti-spam','Time out members who flood the chat.'],['security','Security','Anti-nuke, anti-raid and account checks.']].map(([k,t,d],i)=>`<article class="mod" style="--i:${i+2}"><div class="rowb"><h3>${t}</h3><span class="pill ${mods.modules[k].enabled?'on':''}">${mods.modules[k].enabled?'On':'Off'}</span></div><p>${d}</p><button class="btn" data-v="${k}">Configure</button></article>`).join('')}</div>
+   ${[['leveling','Leveling','XP, ranks and role rewards for active members.'],['autoroles','Auto-roles','Give new members roles automatically.'],['antispam','Anti-spam','Time out members who flood the chat.'],['security','Security','Anti-nuke, anti-raid and account checks.'],['goodbye','Goodbye','Say goodbye when members leave.'],['logs','Server logs','Joins, leaves, bans and channel changes.']].map(([k,t,d],i)=>`<article class="mod" style="--i:${i+2}"><div class="rowb"><h3>${t}</h3><span class="pill ${mods.modules[k].enabled?'on':''}">${mods.modules[k].enabled?'On':'Off'}</span></div><p>${d}</p><button class="btn" data-v="${k}">Configure</button></article>`).join('')}</div>
   <h2 class="h2">Recent warnings</h2><div class="panel">${ov.warnings.length?`<table><tr><th>Member</th><th>Reason</th><th>By</th><th>Date</th></tr>${ov.warnings.map(r=>`<tr><td>${esc(r.user)}</td><td>${esc(r.reason)}</td><td>${esc(r.mod)}</td><td>${new Date(r.at).toLocaleDateString()}</td></tr>`).join('')}</table>`:'<p class="muted">No warnings yet. Use /warn in Discord to issue one.</p>'}</div>`;
   const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
   document.querySelectorAll('[data-n]').forEach(el=>{const n=+el.dataset.n;if(calm)return el.textContent=n.toLocaleString();const t0=performance.now();(function f(t){const p=Math.min((t-t0)/800,1);el.textContent=Math.round(n*(1-(1-p)**3)).toLocaleString();p<1&&requestAnimationFrame(f)})(t0)});
@@ -198,52 +252,75 @@ function Moderation(){
   $('#main').innerHTML=`<h1>Moderation</h1><p class="sub">Actions are run with slash commands in Discord and recorded in your log channel.</p>
   <div class="cols"><div><div class="panel"><h3>Logging</h3><label for="log">Mod log channel</label><select id="log">${chanOpts(m.logChannelId)}</select>
    <label class="check"><input type="checkbox" id="dm"${m.dm?' checked':''}>Send members a DM when they are kicked, banned, timed out or warned</label></div>
-   <div class="actions"><button class="btn primary" id="msave">Save changes</button></div></div>
+   <div class="actions"><button class="btn primary" id="msave">Save changes</button></div>
+   <div class="panel" style="margin-top:16px"><h3>Warning escalation</h3><p style="margin:0">When a member reaches <input type="number" id="wl2" min="0" max="20" value="${mods.modules.escalation.warnLimit}"> warnings (0 turns this off), automatically <select id="wa" style="width:auto">${[['timeout','time them out'],['kick','kick them'],['ban','ban them']].map(([v,l])=>`<option value="${v}"${mods.modules.escalation.warnAction===v?' selected':''}>${l}</option>`).join('')}</select>. Timeout length: <input type="number" id="wm" min="1" max="40320" value="${mods.modules.escalation.warnMinutes}"> minutes.</p></div>
+   <div class="actions"><button class="btn primary" id="esv">Save escalation</button></div></div>
   <aside class="sticky"><div class="panel"><h3>Slash commands</h3><dl>
    <dt>/warn</dt><dd>Record a warning for a member.</dd><dt>/warnings</dt><dd>Show a member's recent warnings.</dd>
    <dt>/timeout</dt><dd>Mute a member for a set number of minutes.</dd><dt>/kick</dt><dd>Remove a member. They can rejoin.</dd><dt>/ban</dt><dd>Ban a member from the server.</dd></dl></div></aside></div>`;
+  $('#esv').onclick=e=>saveMod('escalation',{warnLimit:+$('#wl2').value,warnAction:$('#wa').value,warnMinutes:+$('#wm').value},e.target);
   $('#msave').onclick=async e=>{e.target.disabled=true;const body={logChannelId:$('#log').value,dm:$('#dm').checked};
     try{await api(`/api/guilds/${gid}/moderation`,{method:'PUT',body});ov.moderation=body;toast('Moderation settings saved')}catch(x){toast(x.message,1)}e.target.disabled=false};
 }
 
 
+const CB={};
+const chItems=()=>data.channels.map(x=>({id:x.id,name:'#'+x.name}));
+const roleItems=()=>mods.roles.map(r=>({id:r.id,name:r.name,off:!r.ok}));
+function cbMake(id,items,sel,o={}){CB[id]={items,sel:[...sel],multi:o.multi!==false,ph:o.ph||'Select'};return `<div class="cb" id="${id}"><button type="button" class="cb-btn" aria-haspopup="listbox"></button><div class="cb-pop" hidden><input type="text" class="cb-q" placeholder="Search" aria-label="Search"><ul class="cb-list" role="listbox"></ul></div></div>`}
+function cbDraw(id){const c=CB[id],el=$('#'+id);if(!el)return;const q=el.querySelector('.cb-q').value.toLowerCase(),nm=i=>c.items.find(x=>x.id===i)?.name;
+  el.querySelector('.cb-btn').innerHTML=(c.sel.length?`<span class="cb-chips">${c.sel.map(i=>`<span class="chip">${esc(nm(i)||i)}${c.multi?`<i data-rm="${i}" role="button" aria-label="Remove">&times;</i>`:''}</span>`).join('')}</span>`:`<span class="cb-ph">${esc(c.ph)}</span>`)+'<span class="cb-ar"></span>';
+  el.querySelector('.cb-list').innerHTML=c.items.filter(x=>x.name.toLowerCase().includes(q)).map(x=>`<li role="option" data-id="${x.id}" aria-selected="${c.sel.includes(x.id)}"${x.off?' aria-disabled="true"':''}>${esc(x.name)}${x.off?'<small>unavailable</small>':''}</li>`).join('')||'<li class="none">No matches</li>'}
+const cbClose=o=>{o.classList.remove('open');o.querySelector('.cb-pop').hidden=true};
+document.addEventListener('click',e=>{const cb=e.target.closest('.cb');
+  document.querySelectorAll('.cb.open').forEach(o=>{if(o!==cb)cbClose(o)});if(!cb)return;const id=cb.id,c=CB[id],pop=cb.querySelector('.cb-pop');
+  const rm=e.target.closest('[data-rm]');if(rm){c.sel=c.sel.filter(x=>x!==rm.dataset.rm);cbDraw(id);cb.dispatchEvent(new Event('change',{bubbles:true}));return}
+  if(e.target.closest('.cb-btn')){const open=pop.hidden;pop.hidden=!open;cb.classList.toggle('open',open);if(open){const q=cb.querySelector('.cb-q');q.value='';cbDraw(id);q.focus()}return}
+  const li=e.target.closest('li[data-id]');if(li&&li.getAttribute('aria-disabled')!=='true'){const v=li.dataset.id;
+    if(c.multi)c.sel=c.sel.includes(v)?c.sel.filter(x=>x!==v):[...c.sel,v];else{c.sel=[v];cbClose(cb)}
+    cbDraw(id);cb.dispatchEvent(new Event('change',{bubbles:true}))}});
+document.addEventListener('input',e=>{const q=e.target.closest?.('.cb-q');if(q)cbDraw(q.closest('.cb').id)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.cb.open').forEach(cbClose)});
 const roleOpts=sel=>'<option value="">Select a role</option>'+mods.roles.map(r=>`<option value="${r.id}"${r.id===sel?' selected':''}${r.ok?'':' disabled'}>${esc(r.name)}${r.ok?'':' (unavailable)'}</option>`).join('');
 const sw=(id,label,on)=>`<label class="switch" for="${id}">${label}<input id="${id}" type="checkbox" role="switch"${on?' checked':''}></label>`;
 async function saveMod(name,body,btn){btn.disabled=true;try{await api(`/api/guilds/${gid}/modules/${name}`,{method:'PUT',body});mods.modules[name]=body;toast('Saved')}catch(e){toast(e.message,1)}btn.disabled=false}
 
 function Leveling(){
   const c=mods.modules.leveling;let rw=c.rewards.map(r=>({...r}));
-  $('#main').innerHTML=`<h1>Leveling</h1><p class="sub">Members earn XP by chatting (once a minute) and level up. They can check progress with /rank and /leaderboard.</p>
+  $('#main').innerHTML=`<h1>Leveling</h1><p class="sub">Members earn XP by chatting and level up. They can check progress with /rank and /leaderboard.</p>
   <div class="panel pn">${sw('en','Enable leveling',c.enabled)}
-   <label for="mode">Where members earn XP</label><select id="mode"><option value="all"${c.mode==='all'?' selected':''}>All channels</option><option value="only"${c.mode==='only'?' selected':''}>Only the selected channels</option><option value="except"${c.mode==='except'?' selected':''}>All channels except the selected ones</option></select>
-   <div class="chl" id="chl">${data.channels.map(x=>`<label class="check"><input type="checkbox" value="${x.id}"${c.channelIds.includes(x.id)?' checked':''}>#${esc(x.name)}</label>`).join('')}</div>
-   <label for="ch">Level-up announcements</label><select id="ch"><option value="">In the channel where they chatted</option>${data.channels.map(x=>`<option value="${x.id}"${x.id===c.channelId?' selected':''}>#${esc(x.name)}</option>`).join('')}</select>
+   <label for="mode">Where members earn XP</label><select id="mode">${[['all','All channels'],['only','Only the selected channels'],['except','All channels except the selected ones']].map(([v,l])=>`<option value="${v}"${c.mode===v?' selected':''}>${l}</option>`).join('')}</select>
+   <div id="chw" style="margin-top:10px">${cbMake('lch',chItems(),c.channelIds,{ph:'Search and select channels'})}</div>
+   <div class="row" style="margin-top:16px"><div><label for="cd">XP cooldown (seconds)</label><input type="number" id="cd" min="10" max="600" value="${c.cooldown}" style="width:100%;margin:0"></div><div><label for="xm">XP multiplier</label><input type="number" id="xm" min="0.5" max="5" step="0.5" value="${c.xpMultiplier}" style="width:100%;margin:0"></div></div>
+   <label>Level-up announcements</label>${cbMake('lan',[{id:'',name:'In the channel where they chatted'},...chItems()],[c.channelId],{multi:false,ph:'Select a channel'})}
    <label for="msg">Message</label><textarea id="msg">${esc(c.message)}</textarea><p class="hint">Use {user} and {level}.</p></div>
   <div class="panel pn"><h3>Role rewards</h3><div id="rw"></div><button class="btn" id="add">Add reward</button></div>
   <div class="actions pn" style="margin-bottom:8px"><button class="btn primary" id="sv">Save changes</button></div>
   <h2 class="h2">Top members</h2><div class="panel pn">${mods.leaders.length?`<table>${mods.leaders.map((r,i)=>`<tr><td>#${i+1}</td><td>${esc(r.name)}</td><td>Level ${r.level}</td><td>${r.xp.toLocaleString()} XP</td></tr>`).join('')}</table>`:'<p class="muted">No XP earned yet.</p>'}</div>`;
-  const sync=()=>{$('#chl').hidden=$('#mode').value==='all'};$('#mode').onchange=sync;sync();
-  const rows=()=>{$('#rw').innerHTML=rw.map((r,i)=>`<div class="rw"><span>Level</span><input type="number" min="1" max="200" value="${r.level}" data-i="${i}" aria-label="Level"><select data-i="${i}" aria-label="Role">${roleOpts(r.roleId)}</select><button class="btn" data-x="${i}" aria-label="Remove reward">&times;</button></div>`).join('')||'<p class="muted">No rewards yet.</p>'};
-  $('#rw').onchange=$('#rw').oninput=e=>{const i=e.target.dataset.i;if(i==null)return;e.target.matches('input')?rw[i].level=+e.target.value:rw[i].roleId=e.target.value};
+  cbDraw('lch');cbDraw('lan');
+  const sync=()=>{$('#chw').hidden=$('#mode').value==='all'};$('#mode').onchange=sync;sync();
+  const rows=()=>{$('#rw').innerHTML=rw.map((r,i)=>`<div class="rw"><span>Level</span><input type="number" min="1" max="200" value="${r.level}" data-i="${i}" aria-label="Level">${cbMake('rwr'+i,roleItems(),r.roleId?[r.roleId]:[],{multi:false,ph:'Select a role'})}<button class="btn" data-x="${i}" aria-label="Remove reward">&times;</button></div>`).join('')||'<p class="muted">No rewards yet. Add one to give a role at a certain level.</p>';rw.forEach((_,i)=>cbDraw('rwr'+i))};
+  $('#rw').onchange=$('#rw').oninput=e=>{const i=e.target.dataset?.i;if(i!=null&&e.target.matches('input'))rw[i].level=+e.target.value;const cb=e.target.closest('.cb');if(cb&&cb.id.startsWith('rwr'))rw[+cb.id.slice(3)].roleId=CB[cb.id].sel[0]||''};
   $('#rw').onclick=e=>{const x=e.target.dataset.x;if(x!=null){rw.splice(+x,1);rows()}};
   $('#add').onclick=()=>{if(rw.length<10){rw.push({level:5,roleId:''});rows()}};
-  $('#sv').onclick=e=>saveMod('leveling',{enabled:$('#en').checked,channelId:$('#ch').value,message:$('#msg').value,mode:$('#mode').value,channelIds:[...document.querySelectorAll('#chl input:checked')].map(x=>x.value),rewards:rw.filter(r=>r.roleId)},e.target);
+  $('#sv').onclick=e=>saveMod('leveling',{enabled:$('#en').checked,channelId:CB.lan.sel[0]||'',message:$('#msg').value,mode:$('#mode').value,channelIds:CB.lch.sel,cooldown:+$('#cd').value,xpMultiplier:+$('#xm').value,rewards:rw.filter(r=>r.roleId)},e.target);
   rows();
 }
 function AutoRoles(){
   const c=mods.modules.autoroles;
   $('#main').innerHTML=`<h1>Auto-roles</h1><p class="sub">Give new members roles when they join, or hand out a role right now.</p>
-  <div class="panel pn">${sw('en','Give these roles to every new member',c.enabled)}<h3>Roles</h3>${mods.roles.map(r=>`<label class="check"><input type="checkbox" value="${r.id}"${c.roleIds.includes(r.id)?' checked':''}${r.ok?'':' disabled'}>${esc(r.name)}${r.ok?'':' (unavailable)'}</label>`).join('')||'<p class="muted">No roles to assign.</p>'}
+  <div class="panel pn">${sw('en','Give these roles to every new member',c.enabled)}<label>Roles for new members</label>${cbMake('ar',roleItems(),c.roleIds,{ph:'Search and select roles'})}
    <p class="hint">Unavailable roles are above the bot's role or above yours. Drag the bot's role higher in Server Settings &rarr; Roles.</p></div>
   <div class="actions pn"><button class="btn primary" id="sv">Save changes</button></div>
-  <h2 class="h2">Give a role now</h2><div class="panel pn"><label for="gr">Role</label><select id="gr">${roleOpts('')}</select>
+  <h2 class="h2">Give a role now</h2><div class="panel pn"><label>Role</label>${cbMake('gr',roleItems(),[],{multi:false,ph:'Search and select a role'})}
    <label for="gt">Give it to</label><select id="gt"><option value="all">Everyone in the server</option><option value="one">One member</option></select>
    <div id="g1" hidden><label for="gu">Username or user ID</label><input type="text" id="gu" placeholder="e.g. kyrox or 123456789012345678"></div>
    <label class="check" id="g2"><input type="checkbox" id="gb" checked>Skip bots</label>
    <div class="actions" style="margin-top:16px"><button class="btn primary" id="go1">Give role</button></div></div>`;
-  $('#sv').onclick=e=>saveMod('autoroles',{enabled:$('#en').checked,roleIds:[...document.querySelectorAll('.panel .check input:checked')].filter(x=>x.value).map(x=>x.value)},e.target);
+  cbDraw('ar');cbDraw('gr');
+  $('#sv').onclick=e=>saveMod('autoroles',{enabled:$('#en').checked,roleIds:CB.ar.sel},e.target);
   const sync=()=>{const one=$('#gt').value==='one';$('#g1').hidden=!one;$('#g2').hidden=one};$('#gt').onchange=sync;sync();
-  $('#go1').onclick=async e=>{const roleId=$('#gr').value,all=$('#gt').value==='all';if(!roleId)return toast('Pick a role first',1);
+  $('#go1').onclick=async e=>{const roleId=CB.gr.sel[0],all=$('#gt').value==='all';if(!roleId)return toast('Pick a role first',1);
    if(all&&!confirm('Give this role to every member of the server? Large servers can take a while.'))return;
    e.target.disabled=true;
    try{const r=await api(`/api/guilds/${gid}/autoroles/give`,{method:'POST',body:{roleId,target:all?'all':'one',user:$('#gu').value,skipBots:$('#gb').checked}});
@@ -253,7 +330,7 @@ function CommandsView(){
   const c=mods.modules.general,p=esc(c.prefix);
   $('#main').innerHTML=`<h1>Commands</h1><p class="sub">Choose the prefix members type before text commands in this server.</p>
   <div class="panel pn"><label for="px">Command prefix</label><input type="text" id="px" maxlength="3" value="${p}" style="max-width:120px"><p class="hint">Up to 3 characters, for example ? or !</p>
-   ${mods.contentIntent?'':'<p class="hint" style="color:var(--err)">Text commands are switched off for this bot. Turn on Message Content Intent in the Discord Developer Portal, then add the variable MESSAGE_CONTENT=true in Railway.</p>'}</div>
+   </div>
   <div class="actions pn"><button class="btn primary" id="sv">Save changes</button></div>
   <h2 class="h2">Available commands</h2><div class="panel pn"><dl><dt>${p}help</dt><dd>Show every command.</dd><dt>${p}rank</dt><dd>Show your level, or mention someone else.</dd><dt>${p}leaderboard</dt><dd>Show the top members.</dd><dt>${p}ping</dt><dd>Check that the bot is awake.</dd>
    <dt>/help /rank /leaderboard</dt><dd>The same commands as slash commands.</dd></dl></div>`;
@@ -275,12 +352,41 @@ function SecurityView(){
   <div class="actions pn"><button class="btn primary" id="sv">Save changes</button></div>`;
   $('#sv').onclick=e=>saveMod('security',{nukeEnabled:$('#ne').checked,nukeLimit:+$('#nl').value,nukeSeconds:+$('#ns').value,nukeAction:$('#na').value,raidEnabled:$('#re').checked,raidJoins:+$('#rj').value,raidSeconds:+$('#rs').value,raidAction:$('#ra').value,minAgeDays:+$('#ma').value,blockBots:$('#bb').checked,whitelist:$('#wl').value.split(/[\s,]+/).filter(x=>/^\d{15,20}$/.test(x))},e.target);
 }
+function GoodbyeView(){
+  const c=mods.modules.goodbye;
+  $('#main').innerHTML=`<h1>Goodbye message</h1><p class="sub">Post a short message when someone leaves the server.</p>
+  <div class="panel pn">${sw('en','Send a goodbye message',c.enabled)}<label>Channel</label>${cbMake('gch',chItems(),c.channelId?[c.channelId]:[],{multi:false,ph:'Select a channel'})}
+   <label for="msg">Message</label><textarea id="msg">${esc(c.message)}</textarea><p class="hint">Use {username}, {server} and {memberCount}.</p></div>
+  <div class="actions pn"><button class="btn primary" id="sv">Save changes</button></div>`;
+  cbDraw('gch');
+  $('#sv').onclick=e=>saveMod('goodbye',{enabled:$('#en').checked,channelId:CB.gch.sel[0]||'',message:$('#msg').value},e.target);
+}
+function LogsView(){
+  const c=mods.modules.logs,t=(id,l)=>`<label class="check"><input type="checkbox" id="${id}"${c[id]?' checked':''}>${l}</label>`;
+  $('#main').innerHTML=`<h1>Server logs</h1><p class="sub">Keep a record of what happens in your server.</p>
+  <div class="panel pn">${sw('en','Enable server logs',c.enabled)}<label>Log channel</label>${cbMake('lch',chItems(),c.channelId?[c.channelId]:[],{multi:false,ph:'Select a channel'})}
+   <h3 style="margin:22px 0 4px">What to log</h3>${t('joins','Members joining')}${t('leaves','Members leaving')}${t('bans','Bans and unbans')}${t('channels','Channels created or deleted')}${t('roles','Roles created or deleted')}</div>
+  <div class="actions pn"><button class="btn primary" id="sv">Save changes</button></div>`;
+  cbDraw('lch');
+  $('#sv').onclick=e=>saveMod('logs',{enabled:$('#en').checked,channelId:CB.lch.sel[0]||'',...Object.fromEntries(['joins','leaves','bans','channels','roles'].map(k=>[k,$('#'+k).checked]))},e.target);
+}
+function PanelView(){
+  $('#main').innerHTML=`<h1>Role panel</h1><p class="sub">Post a message with buttons. Members click a button to add or remove that role themselves.</p>
+  <div class="panel pn"><label>Channel</label>${cbMake('pch',chItems(),[],{multi:false,ph:'Select a channel'})}
+   <label for="pt">Title</label><input type="text" id="pt" value="Pick your roles">
+   <label for="pd">Description</label><textarea id="pd">Click a button to add or remove a role.</textarea>
+   <label>Roles (up to 10)</label>${cbMake('pr',roleItems(),[],{ph:'Search and select roles'})}
+   <div class="actions" style="margin-top:16px"><button class="btn primary" id="pp">Post panel</button></div></div>`;
+  cbDraw('pch');cbDraw('pr');
+  $('#pp').onclick=async e=>{e.target.disabled=true;try{await api(`/api/guilds/${gid}/rolepanel`,{method:'POST',body:{channelId:CB.pch.sel[0]||'',title:$('#pt').value,description:$('#pd').value,roleIds:CB.pr.sel}});toast('Panel posted')}catch(x){toast(x.message,1)}e.target.disabled=false};
+}
 function AntiSpam(){
   const c=mods.modules.antispam;
   $('#main').innerHTML=`<h1>Anti-spam</h1><p class="sub">Automatically time out members who flood a channel. Members with Manage Messages are ignored.</p>
-  <div class="panel pn">${sw('en','Enable anti-spam',c.enabled)}<p style="margin:0">Time out anyone who sends <input type="number" id="n" min="3" max="20" value="${c.messages}"> messages within <input type="number" id="s" min="2" max="30" value="${c.seconds}"> seconds, for <input type="number" id="t" min="1" max="60" value="${c.timeoutMinutes}"> minutes.</p></div>
+  <div class="panel pn">${sw('en','Enable anti-spam',c.enabled)}<p style="margin:0">Time out anyone who sends <input type="number" id="n" min="3" max="20" value="${c.messages}"> messages within <input type="number" id="s" min="2" max="30" value="${c.seconds}"> seconds, for <input type="number" id="t" min="1" max="60" value="${c.timeoutMinutes}"> minutes.</p>
+   <p style="margin:16px 0 0">Also time out anyone who mentions <input type="number" id="mn" min="0" max="30" value="${c.mentionLimit||0}"> or more people in one message (0 turns this off).</p></div>
   <div class="actions pn"><button class="btn primary" id="sv">Save changes</button></div>`;
-  $('#sv').onclick=e=>saveMod('antispam',{enabled:$('#en').checked,messages:+$('#n').value,seconds:+$('#s').value,timeoutMinutes:+$('#t').value},e.target);
+  $('#sv').onclick=e=>saveMod('antispam',{enabled:$('#en').checked,messages:+$('#n').value,seconds:+$('#s').value,timeoutMinutes:+$('#t').value,mentionLimit:+$('#mn').value},e.target);
 }
 
 function Welcome(){
@@ -331,6 +437,14 @@ function draw(){
     ${e.footer||e.timestamp?`<div class="f">${e.footerIcon&&s.icon&&e.footer?`<img src="${esc(s.icon)}" alt="">`:''}<span>${esc(fill(e.footer))}${e.timestamp?(e.footer?' • ':'')+'Today':''}</span></div>`:''}</div>`:''}
   </div></div>`;
 }
+
+/* scroll + pointer effects */
+const hdr=document.querySelector('header'),root2=document.documentElement;let tk=0;
+addEventListener('scroll',()=>{if(tk)return;tk=requestAnimationFrame(()=>{tk=0;const y=scrollY,h=root2.scrollHeight-innerHeight;hdr.classList.toggle('scrolled',y>8);root2.style.setProperty('--p',h>0?y/h:0);root2.style.setProperty('--sy',y)})},{passive:true});
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.1,rootMargin:'0px 0px -30px 0px'});
+function fx(){document.querySelectorAll('main>h1,main>.sub,main .panel,main .stat,main .mod,main .h2,main .actions,main .hero').forEach(el=>{if(el.classList.contains('rv'))return;el.classList.add('rv');if(el.matches('.stat,.mod'))el.style.setProperty('--d',[...el.parentNode.children].indexOf(el));io.observe(el)})}
+document.addEventListener('pointermove',e=>{const c=e.target.closest?.('.stat,.mod');if(!c)return;const r=c.getBoundingClientRect();c.style.setProperty('--mx',e.clientX-r.left+'px');c.style.setProperty('--my',e.clientY-r.top+'px')},{passive:true});
+document.addEventListener('pointerdown',e=>{const b=e.target.closest?.('.btn.primary');if(!b||b.disabled)return;const r=b.getBoundingClientRect(),d=Math.max(r.width,r.height)*2,s=document.createElement('span');s.className='rip';s.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;b.append(s);setTimeout(()=>s.remove(),650)});
 </script>
 </body>
 </html>

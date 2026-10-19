@@ -1,4 +1,4 @@
-import { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits } from 'discord.js';
+import { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 const str = (v, n) => String(v ?? '').slice(0, n);
 const num = (v, lo, hi, d) => Math.min(Math.max(Math.round(Number(v)) || d, lo), hi);
@@ -7,9 +7,12 @@ const pick = (v, a, d) => (a.includes(v) ? v : d);
 
 export const DEFAULTS = {
   general: { prefix: '?' },
-  leveling: { enabled: false, channelId: '', message: 'GG {user}, you reached level {level}!', mode: 'all', channelIds: [], rewards: [] },
+  goodbye: { enabled: false, channelId: '', message: '{username} has left {server}. We now have {memberCount} members.' },
+  logs: { enabled: false, channelId: '', joins: true, leaves: true, bans: true, channels: true, roles: true },
+  escalation: { warnLimit: 0, warnAction: 'timeout', warnMinutes: 60 },
+  leveling: { enabled: false, channelId: '', message: 'GG {user}, you reached level {level}!', mode: 'all', channelIds: [], cooldown: 60, xpMultiplier: 1, rewards: [] },
   autoroles: { enabled: false, roleIds: [] },
-  antispam: { enabled: false, messages: 6, seconds: 5, timeoutMinutes: 5 },
+  antispam: { enabled: false, messages: 6, seconds: 5, timeoutMinutes: 5, mentionLimit: 0 },
   security: { enabled: false, nukeEnabled: false, nukeLimit: 3, nukeSeconds: 10, nukeAction: 'strip', raidEnabled: false, raidJoins: 6, raidSeconds: 10, raidAction: 'alert', minAgeDays: 0, blockBots: false, whitelist: [] },
 };
 const CLEAN = {
@@ -17,10 +20,14 @@ const CLEAN = {
   leveling: (b) => ({
     enabled: !!b.enabled, channelId: str(b.channelId, 25), message: str(b.message, 500) || DEFAULTS.leveling.message,
     mode: pick(b.mode, ['all', 'only', 'except'], 'all'), channelIds: list(b.channelIds, 50),
+    cooldown: num(b.cooldown, 10, 600, 60), xpMultiplier: Math.min(5, Math.max(0.5, Math.round((Number(b.xpMultiplier) || 1) * 2) / 2)),
     rewards: (Array.isArray(b.rewards) ? b.rewards : []).slice(0, 10).map((r) => ({ level: num(r.level, 1, 200, 1), roleId: str(r.roleId, 25) })).filter((r) => r.roleId),
   }),
   autoroles: (b) => ({ enabled: !!b.enabled, roleIds: list(b.roleIds) }),
-  antispam: (b) => ({ enabled: !!b.enabled, messages: num(b.messages, 3, 20, 6), seconds: num(b.seconds, 2, 30, 5), timeoutMinutes: num(b.timeoutMinutes, 1, 60, 5) }),
+  antispam: (b) => ({ enabled: !!b.enabled, messages: num(b.messages, 3, 20, 6), seconds: num(b.seconds, 2, 30, 5), timeoutMinutes: num(b.timeoutMinutes, 1, 60, 5), mentionLimit: num(b.mentionLimit, 0, 30, 0) }),
+  goodbye: (b) => ({ enabled: !!b.enabled, channelId: str(b.channelId, 25), message: str(b.message, 500) || DEFAULTS.goodbye.message }),
+  logs: (b) => ({ enabled: !!b.enabled, channelId: str(b.channelId, 25), joins: !!b.joins, leaves: !!b.leaves, bans: !!b.bans, channels: !!b.channels, roles: !!b.roles }),
+  escalation: (b) => ({ warnLimit: num(b.warnLimit, 0, 20, 0), warnAction: pick(b.warnAction, ['timeout', 'kick', 'ban'], 'timeout'), warnMinutes: num(b.warnMinutes, 1, 40320, 60) }),
   security: (b) => ({
     enabled: !!b.nukeEnabled || !!b.raidEnabled, nukeEnabled: !!b.nukeEnabled, nukeLimit: num(b.nukeLimit, 2, 20, 3), nukeSeconds: num(b.nukeSeconds, 3, 60, 10),
     nukeAction: pick(b.nukeAction, ['strip', 'kick', 'ban'], 'strip'), raidEnabled: !!b.raidEnabled, raidJoins: num(b.raidJoins, 3, 50, 6), raidSeconds: num(b.raidSeconds, 3, 120, 10),
@@ -76,7 +83,7 @@ export function setupFeatures(client, db) {
   setInterval(() => {
     const n = Date.now();
     for (const [k, v] of spam) if (n - v.at(-1) > 6e4) spam.delete(k);
-    for (const [k, t] of cool) if (n - t > 6e4) cool.delete(k);
+    for (const [k, t] of cool) if (n - t > 6e5) cool.delete(k);
   }, 3e5).unref();
 
   client.on('guildMemberAdd', async (mem) => {
@@ -85,6 +92,25 @@ export function setupFeatures(client, db) {
       const roles = c.enabled ? c.roleIds.map((id) => mem.guild.roles.cache.get(id)).filter((r) => r?.editable) : [];
       if (roles.length) await mem.roles.add(roles, 'Auto-role');
     } catch (e) { console.error('autorole', e.message); }
+  });
+
+  client.on('guildMemberRemove', async (mem) => {
+    try {
+      const c = await cfg(db, mem.guild.id, 'goodbye');
+      const ch = c.enabled && mem.guild.channels.cache.get(c.channelId);
+      if (ch?.isTextBased()) await ch.send({ content: c.message.replaceAll('{username}', mem.user.username).replaceAll('{server}', mem.guild.name).replaceAll('{memberCount}', mem.guild.memberCount), allowedMentions: { parse: [] } });
+    } catch (e) { console.error('goodbye', e.message); }
+  });
+
+  client.on('interactionCreate', async (i) => {
+    if (!i.isButton() || !i.inGuild() || !i.customId.startsWith('rr:')) return;
+    try {
+      const role = i.guild.roles.cache.get(i.customId.slice(3));
+      if (!role?.editable) return await i.reply({ content: "I can't manage that role anymore.", ephemeral: true });
+      const has = i.member.roles.cache.has(role.id);
+      await (has ? i.member.roles.remove(role, 'Role panel') : i.member.roles.add(role, 'Role panel'));
+      await i.reply({ content: `${has ? 'Removed' : 'Added'} **${role.name}**.`, ephemeral: true });
+    } catch (e) { console.error('role panel', e.message); if (!i.replied) i.reply({ content: 'Something went wrong.', ephemeral: true }).catch(() => {}); }
   });
 
   client.on('messageCreate', async (m) => {
@@ -105,6 +131,12 @@ export function setupFeatures(client, db) {
       const k = `${m.guildId}:${m.author.id}`, now = Date.now();
 
       if (sp.enabled && !m.member.permissions.has(PermissionFlagsBits.ManageMessages)) {
+        if (sp.mentionLimit && m.mentions.users.size >= sp.mentionLimit) {
+          m.delete().catch(() => {});
+          if (m.member.moderatable) await m.member.timeout(sp.timeoutMinutes * 6e4, 'Mention spam');
+          m.channel.send({ content: `<@${m.author.id}> was timed out for mass mentions.`, allowedMentions: { users: [] } }).catch(() => {});
+          return;
+        }
         const hits = (spam.get(k) || []).filter((t) => now - t < sp.seconds * 1e3);
         hits.push(now); spam.set(k, hits);
         if (hits.length >= sp.messages && m.member.moderatable) {
@@ -117,9 +149,9 @@ export function setupFeatures(client, db) {
 
       const cid = m.channel.isThread() ? m.channel.parentId : m.channelId;
       const inScope = lv.mode === 'all' || (lv.mode === 'only' ? lv.channelIds.includes(cid) : !lv.channelIds.includes(cid));
-      if (lv.enabled && inScope && now - (cool.get(k) || 0) >= 6e4) {
+      if (lv.enabled && inScope && now - (cool.get(k) || 0) >= lv.cooldown * 1e3) {
         cool.set(k, now);
-        const gain = 15 + Math.floor(Math.random() * 11);
+        const gain = Math.max(1, Math.round((15 + Math.floor(Math.random() * 11)) * lv.xpMultiplier));
         const { rows: [r] } = await db.query(`insert into levels (guild_id, user_id, xp) values ($1,$2,$3)
           on conflict (guild_id, user_id) do update set xp = levels.xp + $3 returning xp`, [m.guildId, m.author.id, gain]);
         const after = lvl(r.xp);
@@ -173,6 +205,19 @@ export function mountFeatures(app, guard, db) {
       on conflict (guild_id, module) do update set config=$3`, [g.id, n, c]);
     cache.delete(g.id);
     res.json({ ok: true });
+  });
+
+  app.post('/api/guilds/:id/rolepanel', guard, async (req, res) => {
+    const g = req.guild, ch = g.channels.cache.get(String(req.body?.channelId));
+    if (!ch?.isTextBased()) return res.status(400).json({ error: 'Pick a channel to post the panel in.' });
+    const roles = list(req.body.roleIds).map((id) => g.roles.cache.get(id))
+      .filter((r) => r?.editable && canGive(g, req.member, r) && !r.permissions.has(PermissionFlagsBits.Administrator));
+    if (!roles.length) return res.status(400).json({ error: 'Pick at least one role the bot can assign.' });
+    const rows = [];
+    for (let i = 0; i < roles.length; i += 5) rows.push(new ActionRowBuilder().addComponents(roles.slice(i, i + 5).map((r) => new ButtonBuilder().setCustomId('rr:' + r.id).setLabel(r.name.slice(0, 80)).setStyle(ButtonStyle.Secondary))));
+    const embed = new EmbedBuilder().setColor(BLUE).setTitle(str(req.body.title, 256) || 'Pick your roles').setDescription(str(req.body.description, 2000) || null);
+    try { await ch.send({ embeds: [embed], components: rows }); res.json({ ok: true }); }
+    catch { res.status(400).json({ error: `I can't post in #${ch.name}. Check my permissions there.` }); }
   });
 
   app.post('/api/guilds/:id/autoroles/give', guard, async (req, res) => {

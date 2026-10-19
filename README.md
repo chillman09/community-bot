@@ -36,3 +36,7 @@ These need the **Manage Roles** permission. Re-invite the bot from the dashboard
 - **Security:** anti-nuke, anti-raid, minimum account age, unauthorized-bot removal and a whitelist. Needs **View Audit Log**. Alerts go to the moderation log channel.
 - **Auto-roles:** give a role to everyone, or to one member, from the dashboard. You can only hand out roles below your own highest role.
 - The invite link was updated again (adds the `applications.commands` scope plus View Audit Log and Manage Messages). Re-invite the bot to refresh permissions.
+
+## More features
+- **Goodbye message, server logs, role panel (button roles)**, warning escalation (auto timeout/kick/ban after N warnings), XP cooldown and multiplier for leveling, and a mass-mention limit in anti-spam.
+- Role panels post a message with buttons. The bot needs a role above the roles it hands out.

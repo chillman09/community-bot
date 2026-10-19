@@ -63,4 +63,24 @@ export function setupSecurity(client, db) {
       }
     } catch (e) { console.error('anti-raid', e.message); }
   });
+  setupLogs(client, db);
+}
+
+function setupLogs(client, db) {
+  const emit = async (g, key, color, title, text) => {
+    try {
+      const c = await cfg(db, g.id, 'logs');
+      if (!c.enabled || !c[key]) return;
+      const ch = g.channels.cache.get(c.channelId);
+      if (ch?.isTextBased()) await ch.send({ embeds: [new EmbedBuilder().setColor(color).setTitle(title).setDescription(text).setTimestamp()] });
+    } catch { /* log channel unavailable */ }
+  };
+  client.on('guildMemberAdd', (m) => emit(m.guild, 'joins', '#0f7b5f', 'Member joined', `<@${m.id}> (${m.user.username}), account created <t:${Math.floor(m.user.createdTimestamp / 1000)}:R>`));
+  client.on('guildMemberRemove', (m) => emit(m.guild, 'leaves', '#b45309', 'Member left', `${m.user.username} (${m.id})`));
+  client.on('guildBanAdd', (b) => emit(b.guild, 'bans', '#b42318', 'Member banned', `${b.user.username} (${b.user.id})`));
+  client.on('guildBanRemove', (b) => emit(b.guild, 'bans', '#2f4bd8', 'Member unbanned', `${b.user.username} (${b.user.id})`));
+  client.on('channelCreate', (c) => c.guild && emit(c.guild, 'channels', '#2f4bd8', 'Channel created', `#${c.name}`));
+  client.on('channelDelete', (c) => c.guild && emit(c.guild, 'channels', '#b42318', 'Channel deleted', `#${c.name}`));
+  client.on('roleCreate', (r) => emit(r.guild, 'roles', '#2f4bd8', 'Role created', r.name));
+  client.on('roleDelete', (r) => emit(r.guild, 'roles', '#b42318', 'Role deleted', r.name));
 }

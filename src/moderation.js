@@ -1,4 +1,4 @@
-import { featureCommands } from './features.js';
+import { featureCommands, cfg } from './features.js';
 import { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits as P } from 'discord.js';
 
 const user = (c) => c.addUserOption((o) => o.setName('user').setDescription('Member').setRequired(true));
@@ -42,17 +42,30 @@ export function setupModeration(client, db) {
 
       const { rows: [s] } = await db.query('select log_channel, dm from mod_settings where guild_id=$1', [i.guildId]);
       if (s?.dm) await target.send(`You were ${past[cmd]} **${i.guild.name}**. Reason: ${why}`).catch(() => {});
+      let extra = '';
       if (cmd === 'kick') await target.kick(why);
       if (cmd === 'ban') await target.ban({ reason: why });
       if (cmd === 'timeout') await target.timeout(i.options.getInteger('minutes') * 6e4, why);
-      if (cmd === 'warn') await db.query('insert into warnings (guild_id, user_id, mod_id, reason) values ($1,$2,$3,$4)', [i.guildId, target.id, i.user.id, why]);
+      if (cmd === 'warn') {
+        await db.query('insert into warnings (guild_id, user_id, mod_id, reason) values ($1,$2,$3,$4)', [i.guildId, target.id, i.user.id, why]);
+        const es = await cfg(db, i.guildId, 'escalation');
+        if (es.warnLimit > 0) {
+          const { rows: [w] } = await db.query('select count(*)::int as n from warnings where guild_id=$1 and user_id=$2', [i.guildId, target.id]);
+          if (w.n >= es.warnLimit) {
+            const done = es.warnAction === 'ban' ? target.bannable && await target.ban({ reason: 'Warning limit reached' }).then(() => true)
+              : es.warnAction === 'kick' ? target.kickable && await target.kick('Warning limit reached').then(() => true)
+              : target.moderatable && await target.timeout(es.warnMinutes * 6e4, 'Warning limit reached').then(() => true);
+            if (done) extra = `\nThey reached ${w.n} warnings, so they were ${es.warnAction === 'timeout' ? 'timed out' : es.warnAction === 'kick' ? 'kicked' : 'banned'}.`;
+          }
+        }
+      }
 
       const ch = s?.log_channel && i.guild.channels.cache.get(s.log_channel);
       if (ch?.isTextBased()) {
         ch.send({ embeds: [new EmbedBuilder().setColor('#2f4bd8').setTitle(cmd[0].toUpperCase() + cmd.slice(1)).setThumbnail(target.user.displayAvatarURL())
           .addFields({ name: 'Member', value: `${target.user.username} (${target.id})` }, { name: 'Moderator', value: `<@${i.user.id}>` }, { name: 'Reason', value: why }).setTimestamp()] }).catch(() => {});
       }
-      await i.reply({ content: `Done: **${target.user.username}** was ${past[cmd]} this server. Reason: ${why}` });
+      await i.reply({ content: `Done: **${target.user.username}** was ${past[cmd]} this server. Reason: ${why}${extra}` });
     } catch (e) { console.error('mod command', e.message); if (!i.replied) fail('Something went wrong running that command.').catch(() => {}); }
   });
 }
