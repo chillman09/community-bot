@@ -4,16 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dashboard</title>
+<link rel="icon" href="/favicon.png"><meta name="theme-color" content="#6657f5">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <script>try{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch{}</script>
 <style>
-:root{--bg:#eef1f4;--card:#fff;--ink:#172033;--muted:#5b667a;--line:#d9dee6;--accent:#2f4bd8;--ok:#0f7b5f;--err:#b42318;
+:root{--bg:#eef1f4;--card:#fff;--ink:#172033;--muted:#5b667a;--line:#d9dee6;--accent:#6657f5;--ok:#0f7b5f;--err:#b42318;
 --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--body:"Hanken Grotesk","Segoe UI",system-ui,sans-serif;--ease:cubic-bezier(.2,.7,.2,1)}
 :root{--field:#fff;--hov:var(--hov);--okbg:#dcf5ec;--toast:#172033;--sk1:#e3e7ec;--sk2:#f1f3f6;color-scheme:light}
-:root[data-theme=dark]{--bg:#0e131b;--card:#161c27;--ink:#e7ebf3;--muted:#9aa5b8;--line:#283140;--accent:#6b83ff;--field:#0f141d;--hov:#3a4658;--ok:#3ccf9e;--okbg:#12372c;--err:#ff7b6e;--toast:#2a3342;--sk1:#1c2431;--sk2:#252f3f;color-scheme:dark}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0e131b;--card:#161c27;--ink:#e7ebf3;--muted:#9aa5b8;--line:#283140;--accent:#6b83ff;--field:#0f141d;--hov:#3a4658;--ok:#3ccf9e;--okbg:#12372c;--err:#ff7b6e;--toast:#2a3342;--sk1:#1c2431;--sk2:#252f3f;color-scheme:dark}}
+:root[data-theme=dark]{--bg:#0e131b;--card:#161c27;--ink:#e7ebf3;--muted:#9aa5b8;--line:#283140;--accent:#8f84ff;--field:#0f141d;--hov:#3a4658;--ok:#3ccf9e;--okbg:#12372c;--err:#ff7b6e;--toast:#2a3342;--sk1:#1c2431;--sk2:#252f3f;color-scheme:dark}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0e131b;--card:#161c27;--ink:#e7ebf3;--muted:#9aa5b8;--line:#283140;--accent:#8f84ff;--field:#0f141d;--hov:#3a4658;--ok:#3ccf9e;--okbg:#12372c;--err:#ff7b6e;--toast:#2a3342;--sk1:#1c2431;--sk2:#252f3f;color-scheme:dark}}
 *{box-sizing:border-box}
 .hr{display:flex;align-items:center;gap:16px}#theme{padding:6px 12px;font-size:13px}.chl{max-height:200px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:6px 12px;margin-top:8px}.chl[hidden]{display:none}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--body)}
@@ -48,7 +49,7 @@ main h1{font:700 28px var(--display);margin:0 0 4px;letter-spacing:-.01em}
 .sub{color:var(--muted);margin:0 0 24px}
 .h2{font:700 18px var(--display);margin:26px 0 12px}
 .muted{color:var(--muted);margin:0}
-.hero{display:flex;gap:18px;align-items:center;padding:26px;border-radius:16px;color:#fff;background:linear-gradient(115deg,#2f4bd8,#6a3df0 55%,#0ea5a4);background-size:200% 200%;animation:flow 14s ease infinite,up .5s var(--ease) both}
+.hero{display:flex;gap:18px;align-items:center;padding:26px;border-radius:16px;color:#fff;background:linear-gradient(115deg,#4f5bff,#8a5cf6 55%,#c057f0);background-size:200% 200%;animation:flow 14s ease infinite,up .5s var(--ease) both}
 .hero .gi{width:64px;height:64px;border-radius:16px;background:rgba(255,255,255,.2);display:grid;place-items:center;font:700 28px var(--display);overflow:hidden;flex:none}
 .hero .gi img{width:100%;height:100%}
 .hero h1{color:#fff;margin:0}.hero p{margin:2px 0 0;opacity:.85}
@@ -89,7 +90,7 @@ input[type=color]{width:44px;height:38px;padding:2px;border:1px solid var(--line
 .sticky{position:sticky;top:78px}
 .pv-title{font-size:13px;color:var(--muted);font-weight:600;margin:0 0 8px}
 .dc{background:#313338;color:#dbdee1;border-radius:10px;padding:16px;font:15px/1.4 "Segoe UI",system-ui,sans-serif;display:flex;gap:12px}
-.dc .av{width:38px;height:38px;border-radius:50%;background:var(--accent);flex:none;display:grid;place-items:center;color:#fff;font-weight:700}
+.dc .av{width:38px;height:38px;border-radius:50%;background:#171112;flex:none;display:grid;place-items:center;overflow:hidden}
 .dc .meta{font-weight:600;color:#fff}
 .dc .tag{background:#5865f2;color:#fff;font-size:10px;padding:1px 5px;border-radius:4px;margin:0 6px;vertical-align:1px}
 .dc .time{font-size:12px;color:#949ba4;font-weight:400}
@@ -111,12 +112,12 @@ input[type=color]{width:44px;height:38px;padding:2px;border:1px solid var(--line
 @keyframes sh{to{background-position:-200% 0}}
 .btn,.chips button,.panel,.mod,.stat,input,select,textarea{transition:background-color .15s,border-color .15s,box-shadow .2s,transform .2s var(--ease),color .15s}
 .btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 12px rgba(23,32,51,.12);border-color:var(--hov)}
-.btn.primary:hover:not(:disabled){filter:brightness(.9);box-shadow:0 6px 16px rgba(47,75,216,.32)}
+.btn.primary:hover:not(:disabled){filter:brightness(.9);box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 32%,transparent)}
 .btn:active:not(:disabled){transform:none;box-shadow:none}
 .stat:hover,.mod:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(23,32,51,.09);border-color:var(--hov)}
 .panel:hover{border-color:var(--hov);box-shadow:0 2px 10px rgba(23,32,51,.06)}
 input[type=text]:hover,select:hover,textarea:hover{border-color:var(--hov)}
-input[type=text]:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,75,216,.15);outline:0}
+input[type=text]:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 15%,transparent);outline:0}
 .chips button:hover{border-color:var(--accent);color:var(--accent);background:var(--card);transform:translateY(-1px)}
 .user a:hover,nav .add:hover{text-decoration:underline}
 .gate>*,main>h1,main>.sub,.h2,main>.panel,.cols>div>*,.sticky{animation:up .5s var(--ease) both}
@@ -124,7 +125,7 @@ input[type=text]:focus,select:focus,textarea:focus{border-color:var(--accent);bo
 .gate>:nth-child(2),main>.sub{animation-delay:.06s}.gate>:nth-child(3){animation-delay:.12s}
 .cols>div>:nth-child(2),.sticky{animation-delay:.12s}.cols>div>:nth-child(3){animation-delay:.18s}.cols>div>:nth-child(4){animation-delay:.24s}
 input[type=number]{width:84px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--field);margin:0 4px}
-input[type=number]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,75,216,.15);outline:0}
+input[type=number]:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 15%,transparent);outline:0}
 .pn{max-width:720px}.hint{color:var(--muted);font-size:13px;margin:8px 0 0}
 .rw{display:flex;gap:10px;align-items:center;margin-bottom:10px}.rw select{flex:1}.rw input{margin:0}.rw .btn{padding:8px 12px}
 main>.pn{animation:up .5s var(--ease) both}
@@ -145,8 +146,8 @@ main .rv.rv{animation:none}
 .stat:hover::before,.mod:hover::before{opacity:1}
 .hero{position:relative;overflow:hidden}
 .hero::before,.hero::after{content:"";position:absolute;border-radius:50%;filter:blur(42px);opacity:.5;pointer-events:none;animation:drift 9s ease-in-out infinite alternate}
-.hero::before{width:220px;height:220px;right:-40px;top:-70px;background:#ffd36b}
-.hero::after{width:180px;height:180px;right:170px;bottom:-100px;background:#4de0d0;animation-delay:-4s}
+.hero::before{width:220px;height:220px;right:-40px;top:-70px;background:#e879f9}
+.hero::after{width:180px;height:180px;right:170px;bottom:-100px;background:#60a5fa;animation-delay:-4s}
 .hero>*{position:relative;z-index:1}
 .hero .gi{transform:translateY(calc(var(--sy,0)*-.05px))}
 .switch input::after{transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
@@ -181,13 +182,44 @@ main .rv.rv{animation:none}
 .cb-list .none{color:var(--muted);cursor:default}
 .rw .cb{flex:1}
 @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}}
-@media(max-width:900px){.app{grid-template-columns:1fr}nav{border-right:0;border-bottom:1px solid var(--line)}.cols{grid-template-columns:1fr}.sticky{position:static}main{padding:20px 16px}}
+.hl{display:flex;align-items:center;gap:4px}.brand{display:flex;align-items:center;gap:10px}.logo{width:34px;height:34px}.nb{display:none;align-items:center;gap:12px;padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line)}.nbl{width:42px;height:42px}.nb b{display:block;font:700 18px var(--display)}.nb span{font-size:13px;color:var(--muted)}.hero .wm{position:absolute;right:-18px;bottom:-34px;width:200px;opacity:.17;filter:brightness(0) invert(1);z-index:0;pointer-events:none}.glogo{width:76px;height:76px;margin-bottom:18px;display:block}
+.burger{display:none;width:40px;height:40px;border:0;background:none;border-radius:10px;cursor:pointer;flex-direction:column;justify-content:center;align-items:center;gap:5px}
+.burger span{width:20px;height:2px;border-radius:2px;background:var(--ink);transition:transform .3s var(--ease),opacity .2s}
+.burger:hover{background:var(--bg)}
+body.menu .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+body.menu .burger span:nth-child(2){opacity:0}
+body.menu .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.scrim{display:none}
+@media(max-width:900px){
+ header{padding:8px 12px;z-index:50}
+ body.has-nav .burger{display:flex}
+ .nb{display:flex}
+ .app{display:block}
+ nav{position:fixed;top:57px;bottom:0;left:0;width:min(84vw,300px);z-index:40;overflow:auto;border-right:1px solid var(--line);transform:translateX(-102%);transition:transform .35s var(--ease),box-shadow .35s}
+ body.menu nav{transform:none;box-shadow:14px 0 44px rgba(8,12,20,.3)}
+ body.menu{overflow:hidden}
+ .scrim{display:block;position:fixed;inset:0;background:rgba(8,12,20,.55);opacity:0;pointer-events:none;transition:opacity .3s;z-index:35}
+ body.menu .scrim{opacity:1;pointer-events:auto}
+ .cols{grid-template-columns:1fr}.sticky{position:static}
+ main{padding:18px 14px 44px}main h1{font-size:24px}
+ .hero{padding:20px;gap:14px}.hero .gi{width:52px;height:52px;font-size:22px}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}.mods{grid-template-columns:1fr}
+ .panel{padding:16px}
+ input,select,textarea{font-size:16px}
+ .actions{flex-wrap:wrap}.actions .btn{flex:1}
+ table{display:block;overflow-x:auto}
+ .rw{flex-wrap:wrap}.rw .cb{flex:1 1 100%;order:3}
+ .gate{margin:7vh auto}.gate h1{font-size:30px}
+ .toast{left:14px;right:14px;bottom:14px}
+ .user span{display:none}.user{gap:10px}.hr{gap:10px}#theme{padding:6px 10px}
+}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
-<header><span class="brand" id="brand">Dashboard</span><div class="hr"><button class="btn" id="theme" type="button">Dark mode</button><div class="user" id="user"></div></div></header>
+<header><div class="hl"><button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button><span class="brand" id="brand">Dashboard</span></div><div class="hr"><button class="btn" id="theme" type="button">Dark mode</button><div class="user" id="user"></div></div></header>
 <div id="root"></div>
+<div class="scrim" id="scrim"></div>
 <script>
 const $=s=>document.querySelector(s),root=$('#root');
 const curT=()=>document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
@@ -203,12 +235,12 @@ const GROUPS=[['Server',['overview','welcome','goodbye']],['Community',['levelin
 const chanOpts=sel=>`<option value="">Select a channel</option>`+data.channels.map(c=>`<option value="${c.id}"${c.id===sel?' selected':''}>#${esc(c.name)}</option>`).join('');
 
 (async function init(){
-  me=await api('/api/me');document.title=me.botName+' dashboard';$('#brand').textContent=me.botName;
+  me=await api('/api/me');document.title=me.botName+' dashboard';$('#brand').innerHTML=`<img src="/logo.png" alt="" class="logo">${esc(me.botName)}`;
   if(!me.user){const err=location.search.includes('error');
-    root.innerHTML=`<section class="gate"><h1>Set up ${esc(me.botName)} for your server.</h1><p>${err?'Login failed. Try again.':'Sign in with Discord to manage welcome messages, moderation and more for servers you run.'}</p><a class="btn primary" href="/auth/login">Continue with Discord</a></section>`;return}
+    root.innerHTML=`<section class="gate"><img src="/logo.png" alt="" class="glogo"><h1>Set up ${esc(me.botName)} for your server.</h1><p>${err?'Login failed. Try again.':'Sign in with Discord to manage welcome messages, moderation and more for servers you run.'}</p><a class="btn primary" href="/auth/login">Continue with Discord</a></section>`;return}
   $('#user').innerHTML=`${me.user.avatar?`<img src="${esc(me.user.avatar)}" alt="">`:''}<span>${esc(me.user.name)}</span><a href="/auth/logout">Log out</a>`;
-  if(!me.guilds.length){root.innerHTML=`<section class="gate"><h1>Add ${esc(me.botName)} to a server.</h1><p>Servers appear here once the bot joins one where you have the Manage Server permission.</p><a class="btn primary" href="${esc(me.invite)}">Add to server</a></section>`;return}
-  root.innerHTML=`<div class="app"><nav><h2>Servers</h2><div class="servers" id="servers"></div><h2>Modules</h2><div id="mods"></div><a class="add" href="${esc(me.invite)}">Add to another server</a></nav><main id="main"></main></div>`;
+  if(!me.guilds.length){root.innerHTML=`<section class="gate"><img src="/logo.png" alt="" class="glogo"><h1>Add ${esc(me.botName)} to a server.</h1><p>Servers appear here once the bot joins one where you have the Manage Server permission.</p><a class="btn primary" href="${esc(me.invite)}">Add to server</a></section>`;return}
+  document.body.classList.add('has-nav');root.innerHTML=`<div class="app"><nav><div class="nb"><img src="/logo.png" alt="" class="nbl"><div><b>${esc(me.botName)}</b><span>Dashboard</span></div></div><h2>Servers</h2><div class="servers" id="servers"></div><h2>Modules</h2><div id="mods"></div><a class="add" href="${esc(me.invite)}">Add to another server</a></nav><main id="main"></main></div>`;
   $('#servers').innerHTML=me.guilds.map(g=>`<button class="sv" data-id="${g.id}" title="${esc(g.name)}" aria-label="${esc(g.name)}">${g.icon?`<img src="${esc(g.icon)}" alt="">`:esc(g.name[0])}</button>`).join('');
   $('#mods').innerHTML=GROUPS.map(([t,ks])=>`<div class="grp">${t}</div>`+ks.map(k=>`<button data-v="${k}">${VIEWS[k]}</button>`).join('')).join('');
   $('#servers').onclick=e=>{const b=e.target.closest('.sv');b&&pick(b.dataset.id)};
@@ -221,13 +253,13 @@ const chanOpts=sel=>`<option value="">Select a channel</option>`+data.channels.m
   pick(me.guilds[0].id);
 })();
 
-async function pick(id){
+async function pick(id){menu(false);
   gid=id;$('#main').innerHTML='<div class="skel"></div><div class="skel" style="height:140px"></div><div class="skel"></div>';
   document.querySelectorAll('.sv').forEach(b=>b.setAttribute('aria-current',b.dataset.id===id));
   try{[data,ov,mods]=await Promise.all([api('/api/guilds/'+id),api(`/api/guilds/${id}/overview`),api(`/api/guilds/${id}/modules`)]);render()}
   catch(e){$('#main').innerHTML=`<p class="muted">${esc(e.message)}</p>`}
 }
-function go(v){view=v;history.replaceState(null,'','#'+v);render()}
+function go(v){menu(false);view=v;history.replaceState(null,'','#'+v);render()}
 function render(){
   document.querySelectorAll('#mods button').forEach(b=>b.setAttribute('aria-current',b.dataset.v===view));
   ({overview:Overview,welcome:Welcome,moderation:Moderation,leveling:Leveling,autoroles:AutoRoles,antispam:AntiSpam,security:SecurityView,commands:CommandsView,goodbye:GoodbyeView,logs:LogsView,panel:PanelView})[view]();scrollTo({top:0,behavior:'instant'});fx();
@@ -236,7 +268,7 @@ function render(){
 function Overview(){
   const s=data.sample,w=data.welcome,m=ov.moderation;
   const stats=[['Members',ov.memberCount],['Channels',ov.channelCount],['Roles',ov.roleCount],['Warnings issued',ov.warningCount]];
-  $('#main').innerHTML=`<section class="hero"><div class="gi">${s.icon?`<img src="${esc(s.icon)}" alt="">`:esc(s.server[0])}</div><div><h1>${esc(s.server)}</h1><p>Manage how ${esc(me.botName)} runs in this server.</p></div></section>
+  $('#main').innerHTML=`<section class="hero"><img class="wm" src="/logo.png" alt=""><div class="gi">${s.icon?`<img src="${esc(s.icon)}" alt="">`:esc(s.server[0])}</div><div><h1>${esc(s.server)}</h1><p>Manage how ${esc(me.botName)} runs in this server.</p></div></section>
   <div class="stats">${stats.map(([k,v],i)=>`<div class="stat" style="--i:${i}"><b data-n="${v}">0</b><span>${k}</span></div>`).join('')}</div>
   <h2 class="h2">Modules</h2><div class="mods">
    <article class="mod" style="--i:0"><div class="rowb"><h3>Welcome</h3><span class="pill ${w.enabled?'on':''}">${w.enabled?'On':'Off'}</span></div><p>Greet new members with a fully custom embed.</p><button class="btn" data-v="welcome">Configure</button></article>
@@ -428,7 +460,7 @@ function draw(){
   const content=md(fill(w.content)).replaceAll(esc('@'+s.username),`<span class="mention">@${esc(s.username)}</span>`);
   const has=e.title||e.description||e.footer;
   const th=e.thumbnail==='user'?s.avatar:e.thumbnail==='server'?s.icon:null;
-  $('#pv').innerHTML=`<div class="dc"><div class="av">${esc(me.botName[0])}</div><div style="min-width:0;flex:1"><div class="meta">${esc(me.botName)}<span class="tag">APP</span><span class="time">Today</span></div>
+  $('#pv').innerHTML=`<div class="dc"><div class="av"><img src="/logo.png" alt=""></div><div style="min-width:0;flex:1"><div class="meta">${esc(me.botName)}<span class="tag">APP</span><span class="time">Today</span></div>
    ${content?`<div>${content}</div>`:''}
    ${has?`<div class="emb" style="border-left-color:${/^#[0-9a-f]{6}$/i.test(e.color)?e.color:'#888'}">
     ${e.author?`<div class="a"><img src="${esc(s.avatar)}" alt="">${esc(s.username)}</div>`:''}
@@ -438,6 +470,10 @@ function draw(){
   </div></div>`;
 }
 
+const menu=o=>{document.body.classList.toggle('menu',o);const b=$('#burger');b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Close menu':'Open menu')};
+$('#burger').onclick=()=>menu(!document.body.classList.contains('menu'));$('#scrim').onclick=()=>menu(false);
+addEventListener('keydown',e=>{if(e.key==='Escape')menu(false)});
+matchMedia('(min-width:901px)').addEventListener('change',e=>e.matches&&menu(false));
 /* scroll + pointer effects */
 const hdr=document.querySelector('header'),root2=document.documentElement;let tk=0;
 addEventListener('scroll',()=>{if(tk)return;tk=requestAnimationFrame(()=>{tk=0;const y=scrollY,h=root2.scrollHeight-innerHeight;hdr.classList.toggle('scrolled',y>8);root2.style.setProperty('--p',h>0?y/h:0);root2.style.setProperty('--sy',y)})},{passive:true});

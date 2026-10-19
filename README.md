@@ -40,3 +40,7 @@ These need the **Manage Roles** permission. Re-invite the bot from the dashboard
 ## More features
 - **Goodbye message, server logs, role panel (button roles)**, warning escalation (auto timeout/kick/ban after N warnings), XP cooldown and multiplier for leveling, and a mass-mention limit in anti-spam.
 - Role panels post a message with buttons. The bot needs a role above the roles it hands out.
+
+
+## Branding
+The bot name comes from the `BOT_NAME` variable (set it to `Kyro` in Railway). The dashboard logo is `public/logo.png` and the favicon is `public/favicon.png`. Upload `kyro-avatar.png` as the bot's avatar in the Discord Developer Portal (Bot tab).

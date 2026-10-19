@@ -38,7 +38,7 @@ const CLEAN = {
 
 const lvl = (xp) => Math.floor(Math.sqrt(xp / 100));
 const need = (l) => 100 * l * l;
-const BLUE = '#2f4bd8';
+const BLUE = '#6657f5';
 
 export const featureCommands = [
   new SlashCommandBuilder().setName('rank').setDescription('Show your level and XP').addUserOption((o) => o.setName('user').setDescription('Member')).setContexts(0),

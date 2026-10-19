@@ -62,7 +62,7 @@ export function setupModeration(client, db) {
 
       const ch = s?.log_channel && i.guild.channels.cache.get(s.log_channel);
       if (ch?.isTextBased()) {
-        ch.send({ embeds: [new EmbedBuilder().setColor('#2f4bd8').setTitle(cmd[0].toUpperCase() + cmd.slice(1)).setThumbnail(target.user.displayAvatarURL())
+        ch.send({ embeds: [new EmbedBuilder().setColor('#6657f5').setTitle(cmd[0].toUpperCase() + cmd.slice(1)).setThumbnail(target.user.displayAvatarURL())
           .addFields({ name: 'Member', value: `${target.user.username} (${target.id})` }, { name: 'Moderator', value: `<@${i.user.id}>` }, { name: 'Reason', value: why }).setTimestamp()] }).catch(() => {});
       }
       await i.reply({ content: `Done: **${target.user.username}** was ${past[cmd]} this server. Reason: ${why}${extra}` });

@@ -7,7 +7,7 @@ import { setupFeatures, mountFeatures, initFeatures } from './features.js';
 import { setupSecurity } from './security.js';
 import { Client, GatewayIntentBits, EmbedBuilder, PermissionFlagsBits, ChannelType } from 'discord.js';
 
-const { DISCORD_TOKEN, CLIENT_ID, CLIENT_SECRET, BASE_URL, SESSION_SECRET, DATABASE_URL, PORT = 3000, BOT_NAME = 'Beacon' } = process.env;
+const { DISCORD_TOKEN, CLIENT_ID, CLIENT_SECRET, BASE_URL, SESSION_SECRET, DATABASE_URL, PORT = 3000, BOT_NAME = 'Kyro' } = process.env;
 
 const local = /localhost|railway\.internal/.test(DATABASE_URL || '');
 const db = new pg.Pool({ connectionString: DATABASE_URL, ssl: local ? false : { rejectUnauthorized: false } });
@@ -16,7 +16,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBit
 /* ---------- welcome settings ---------- */
 const DEFAULT = {
   enabled: false, channelId: '', content: 'Welcome {user}!',
-  embed: { color: '#2f4bd8', author: true, title: 'Welcome to {server}', description: 'Read the rules, grab your roles, then say hi.', thumbnail: 'user', footer: 'We now have {memberCount} members', footerIcon: true, timestamp: false },
+  embed: { color: '#6657f5', author: true, title: 'Welcome to {server}', description: 'Read the rules, grab your roles, then say hi.', thumbnail: 'user', footer: 'We now have {memberCount} members', footerIcon: true, timestamp: false },
 };
 const str = (v, n) => String(v ?? '').slice(0, n);
 const hex = (c) => (/^#[0-9a-f]{6}$/i.test(c) ? c : DEFAULT.embed.color);

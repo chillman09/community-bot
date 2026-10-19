@@ -78,9 +78,9 @@ function setupLogs(client, db) {
   client.on('guildMemberAdd', (m) => emit(m.guild, 'joins', '#0f7b5f', 'Member joined', `<@${m.id}> (${m.user.username}), account created <t:${Math.floor(m.user.createdTimestamp / 1000)}:R>`));
   client.on('guildMemberRemove', (m) => emit(m.guild, 'leaves', '#b45309', 'Member left', `${m.user.username} (${m.id})`));
   client.on('guildBanAdd', (b) => emit(b.guild, 'bans', '#b42318', 'Member banned', `${b.user.username} (${b.user.id})`));
-  client.on('guildBanRemove', (b) => emit(b.guild, 'bans', '#2f4bd8', 'Member unbanned', `${b.user.username} (${b.user.id})`));
-  client.on('channelCreate', (c) => c.guild && emit(c.guild, 'channels', '#2f4bd8', 'Channel created', `#${c.name}`));
+  client.on('guildBanRemove', (b) => emit(b.guild, 'bans', '#6657f5', 'Member unbanned', `${b.user.username} (${b.user.id})`));
+  client.on('channelCreate', (c) => c.guild && emit(c.guild, 'channels', '#6657f5', 'Channel created', `#${c.name}`));
   client.on('channelDelete', (c) => c.guild && emit(c.guild, 'channels', '#b42318', 'Channel deleted', `#${c.name}`));
-  client.on('roleCreate', (r) => emit(r.guild, 'roles', '#2f4bd8', 'Role created', r.name));
+  client.on('roleCreate', (r) => emit(r.guild, 'roles', '#6657f5', 'Role created', r.name));
   client.on('roleDelete', (r) => emit(r.guild, 'roles', '#b42318', 'Role deleted', r.name));
 }
