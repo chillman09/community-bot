@@ -190,6 +190,16 @@ body.menu .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 body.menu .burger span:nth-child(2){opacity:0}
 body.menu .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 .scrim{display:none}
+.arow{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.arow:first-child{border-top:0}
+.arow .gi2{width:36px;height:36px;border-radius:50%;background:var(--bg);display:grid;place-items:center;overflow:hidden;flex:none;font-weight:700}
+.arow .gi2 img{width:100%;height:100%}
+.arow .grow{flex:1;min-width:0}
+.arow .grow b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.arow small{color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.addrow{display:flex;gap:10px;flex-wrap:wrap}.addrow input[type=text]{flex:1;min-width:150px}
+.perms{display:flex;gap:6px;flex-wrap:wrap}
+
 @media(max-width:900px){
  header{padding:8px 12px;z-index:50}
  body.has-nav .burger{display:flex}
@@ -230,7 +240,8 @@ const md=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/__(.+?)__/g,'<
 async function api(path,opt){const r=await fetch(path,opt&&{method:opt.method,headers:{'Content-Type':'application/json'},body:JSON.stringify(opt.body)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Something went wrong.');return j}
 const toast=(m,bad)=>{const t=document.createElement('div');t.className='toast'+(bad?' bad':'');t.textContent=m;t.setAttribute('role','status');document.body.append(t);setTimeout(()=>t.classList.add('out'),2600);setTimeout(()=>t.remove(),3100)};
 let me,gid,data,ov,mods,view=location.hash.slice(1)||'overview',last;
-const VIEWS={overview:'Overview',welcome:'Welcome',goodbye:'Goodbye',leveling:'Leveling',autoroles:'Auto-roles',panel:'Role panel',moderation:'Moderation',antispam:'Anti-spam',security:'Security',logs:'Server logs',commands:'Commands'};
+const VIEWS={overview:'Overview',welcome:'Welcome',goodbye:'Goodbye',leveling:'Leveling',autoroles:'Auto-roles',panel:'Role panel',moderation:'Moderation',antispam:'Anti-spam',security:'Security',logs:'Server logs',commands:'Commands',a_overview:'Bot overview',a_servers:'All servers',a_blacklist:'Blacklist',a_staff:'Staff',a_log:'Activity log'};
+const GROUPS2=()=>[...GROUPS,...(me.admin?[['Admin',['a_overview','a_servers','a_blacklist',...(me.admin.perms.includes('staff')?['a_staff']:[]),'a_log']]]:[])];
 const GROUPS=[['Server',['overview','welcome','goodbye']],['Community',['leveling','autoroles','panel']],['Protection',['moderation','antispam','security','logs']],['Bot',['commands']]];
 const chanOpts=sel=>`<option value="">Select a channel</option>`+data.channels.map(c=>`<option value="${c.id}"${c.id===sel?' selected':''}>#${esc(c.name)}</option>`).join('');
 
@@ -242,7 +253,7 @@ const chanOpts=sel=>`<option value="">Select a channel</option>`+data.channels.m
   if(!me.guilds.length){root.innerHTML=`<section class="gate"><img src="/logo.png" alt="" class="glogo"><h1>Add ${esc(me.botName)} to a server.</h1><p>Servers appear here once the bot joins one where you have the Manage Server permission.</p><a class="btn primary" href="${esc(me.invite)}">Add to server</a></section>`;return}
   document.body.classList.add('has-nav');root.innerHTML=`<div class="app"><nav><div class="nb"><img src="/logo.png" alt="" class="nbl"><div><b>${esc(me.botName)}</b><span>Dashboard</span></div></div><h2>Servers</h2><div class="servers" id="servers"></div><h2>Modules</h2><div id="mods"></div><a class="add" href="${esc(me.invite)}">Add to another server</a></nav><main id="main"></main></div>`;
   $('#servers').innerHTML=me.guilds.map(g=>`<button class="sv" data-id="${g.id}" title="${esc(g.name)}" aria-label="${esc(g.name)}">${g.icon?`<img src="${esc(g.icon)}" alt="">`:esc(g.name[0])}</button>`).join('');
-  $('#mods').innerHTML=GROUPS.map(([t,ks])=>`<div class="grp">${t}</div>`+ks.map(k=>`<button data-v="${k}">${VIEWS[k]}</button>`).join('')).join('');
+  $('#mods').innerHTML=GROUPS2().map(([t,ks])=>`<div class="grp">${t}</div>`+ks.map(k=>`<button data-v="${k}">${VIEWS[k]}</button>`).join('')).join('');
   $('#servers').onclick=e=>{const b=e.target.closest('.sv');b&&pick(b.dataset.id)};
   const m=$('#main');
   m.onclick=e=>{const b=e.target.closest('[data-v]');b&&go(b.dataset.v)};
@@ -260,9 +271,9 @@ async function pick(id){menu(false);
   catch(e){$('#main').innerHTML=`<p class="muted">${esc(e.message)}</p>`}
 }
 function go(v){menu(false);view=v;history.replaceState(null,'','#'+v);render()}
-function render(){
+function render(){if(view.startsWith('a_')&&!me.admin)view='overview';
   document.querySelectorAll('#mods button').forEach(b=>b.setAttribute('aria-current',b.dataset.v===view));
-  ({overview:Overview,welcome:Welcome,moderation:Moderation,leveling:Leveling,autoroles:AutoRoles,antispam:AntiSpam,security:SecurityView,commands:CommandsView,goodbye:GoodbyeView,logs:LogsView,panel:PanelView})[view]();scrollTo({top:0,behavior:'instant'});fx();
+  ({overview:Overview,welcome:Welcome,moderation:Moderation,leveling:Leveling,autoroles:AutoRoles,antispam:AntiSpam,security:SecurityView,commands:CommandsView,goodbye:GoodbyeView,logs:LogsView,panel:PanelView,a_overview:AdmOverview,a_servers:AdmServers,a_blacklist:AdmBlacklist,a_staff:AdmStaff,a_log:AdmLog})[view]();scrollTo({top:0,behavior:'instant'});fx();
 }
 
 function Overview(){
@@ -411,6 +422,62 @@ function PanelView(){
    <div class="actions" style="margin-top:16px"><button class="btn primary" id="pp">Post panel</button></div></div>`;
   cbDraw('pch');cbDraw('pr');
   $('#pp').onclick=async e=>{e.target.disabled=true;try{await api(`/api/guilds/${gid}/rolepanel`,{method:'POST',body:{channelId:CB.pch.sel[0]||'',title:$('#pt').value,description:$('#pd').value,roleIds:CB.pr.sel}});toast('Panel posted')}catch(x){toast(x.message,1)}e.target.disabled=false};
+}
+const permLabel={view:'View stats and servers',blacklist:'Block servers and users',premium:'Manage premium',leave:'Remove the bot from servers',staff:'Manage staff'};
+const can=p=>me.admin?.perms.includes(p);
+const upt=s=>{s=Math.floor(s);const d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60);return d?`${d}d ${h}h`:h?`${h}h ${m}m`:`${m}m`};
+async function adm(title,sub,build){
+  const head=`<h1>${title}</h1><p class="sub">${sub}</p>`;
+  $('#main').innerHTML=head+'<div class="skel"></div>';
+  try{$('#main').innerHTML=head+await build()}catch(e){$('#main').innerHTML=head+`<div class="panel pn"><p class="muted">${esc(e.message)}</p></div>`}
+  fx();
+}
+async function AdmOverview(){
+  await adm('Bot overview','Live numbers for the whole bot.',async()=>{
+    const o=await api('/api/admin/overview');
+    const st=[['Servers',o.servers],['Members',o.members],['Ping',o.ping+' ms'],['Uptime',upt(o.uptime)],['Memory',o.memory+' MB'],['Premium servers',o.premium],['Blocked',o.blocked],['Warnings issued',o.warnings]];
+    return `<div class="stats" style="margin-top:0">${st.map(([k,v],i)=>`<div class="stat" style="--i:${i}"><b>${typeof v==='number'?v.toLocaleString():esc(v)}</b><span>${k}</span></div>`).join('')}</div>
+    <h2 class="h2">Your access</h2><div class="panel pn"><p style="margin:0 0 12px">Rank: <span class="pill on">${esc(me.admin.rank)}</span></p><div class="perms">${me.admin.perms.map(p=>`<span class="chip">${permLabel[p]}</span>`).join('')}</div></div>`;
+  });
+}
+async function AdmServers(){
+  let d=[];
+  await adm('All servers','Every server the bot is in.',async()=>{d=await api('/api/admin/servers');return `<div class="panel pn"><input type="text" id="q" placeholder="Search by name or ID" aria-label="Search servers"><div id="sl" style="margin-top:10px"></div></div>`});
+  if(!$('#q'))return;
+  const draw=()=>{const q=$('#q').value.toLowerCase();$('#sl').innerHTML=d.filter(g=>g.name.toLowerCase().includes(q)||g.id.includes(q)).map(g=>`<div class="arow"><div class="gi2">${g.icon?`<img src="${esc(g.icon)}" alt="">`:esc(g.name[0])}</div><div class="grow"><b>${esc(g.name)}</b><small>${g.members.toLocaleString()} members &middot; owner ${esc(g.ownerId)} &middot; ${esc(g.id)}</small></div>
+   ${can('premium')?`<label class="switch" style="margin:0;gap:8px">Premium<input type="checkbox" data-p="${g.id}"${g.premium?' checked':''}></label>`:(g.premium?'<span class="pill on">Premium</span>':'')}
+   ${can('leave')?`<button class="btn" data-l="${g.id}">Leave</button>`:''}</div>`).join('')||'<p class="muted">No servers match.</p>'};
+  $('#q').oninput=draw;draw();
+  $('#sl').onchange=async e=>{const id=e.target.dataset.p;if(!id)return;try{await api(`/api/admin/servers/${id}/premium`,{method:'POST',body:{premium:e.target.checked}});d.find(g=>g.id===id).premium=e.target.checked;toast('Premium updated')}catch(x){toast(x.message,1);e.target.checked=!e.target.checked}};
+  $('#sl').onclick=async e=>{const id=e.target.dataset.l;if(!id||!confirm('Remove the bot from this server?'))return;try{await api(`/api/admin/servers/${id}/leave`,{method:'POST',body:{}});d=d.filter(g=>g.id!==id);draw();toast('Left the server')}catch(x){toast(x.message,1)}};
+}
+async function AdmBlacklist(){
+  let d=[];
+  await adm('Blacklist','Blocked servers are removed and can not add the bot again. Blocked users can not use the dashboard.',async()=>{d=await api('/api/admin/blacklist');
+    return `${can('blacklist')?`<div class="panel pn"><div class="addrow"><select id="bk" style="width:auto"><option value="guild">Server</option><option value="user">User</option></select><input type="text" id="bi" placeholder="ID" aria-label="ID"><input type="text" id="br" placeholder="Reason (optional)" aria-label="Reason"><button class="btn primary" id="ba">Block</button></div></div>`:''}<div class="panel pn" id="bl"></div>`});
+  if(!$('#bl'))return;
+  const draw=()=>{$('#bl').innerHTML=d.map(r=>`<div class="arow"><div class="grow"><b>${r.kind==='guild'?'Server':'User'} ${esc(r.id)}</b><small>${esc(r.reason||'No reason')} &middot; by ${esc(r.by||'unknown')} &middot; ${new Date(r.at).toLocaleDateString()}</small></div>${can('blacklist')?`<button class="btn" data-k="${r.kind}" data-i="${r.id}">Unblock</button>`:''}</div>`).join('')||'<p class="muted">Nothing is blocked.</p>'};
+  draw();
+  if($('#ba'))$('#ba').onclick=async e=>{e.target.disabled=true;try{await api('/api/admin/blacklist',{method:'POST',body:{kind:$('#bk').value,id:$('#bi').value,reason:$('#br').value}});d=await api('/api/admin/blacklist');draw();$('#bi').value='';$('#br').value='';toast('Blocked')}catch(x){toast(x.message,1)}e.target.disabled=false};
+  $('#bl').onclick=async e=>{const k=e.target.dataset.k,i=e.target.dataset.i;if(!k)return;try{await api(`/api/admin/blacklist/${k}/${i}`,{method:'DELETE'});d=d.filter(r=>!(r.kind===k&&r.id===i));draw();toast('Unblocked')}catch(x){toast(x.message,1)}};
+}
+async function AdmStaff(){
+  let d={staff:[],ranks:{}};
+  const opts=cur=>Object.keys(d.ranks).filter(r=>r!=='owner').map(r=>`<option value="${r}"${r===cur?' selected':''}>${r}</option>`).join('');
+  await adm('Staff','Give people access to this admin panel. What each rank can do is fixed, as shown below.',async()=>{d=await api('/api/admin/staff');
+    return `<div class="panel pn"><div class="addrow"><input type="text" id="si" placeholder="Discord user ID" aria-label="Discord user ID"><select id="sr" style="width:auto">${opts('helper')}</select><button class="btn primary" id="sa">Add staff</button></div></div>
+    <div class="panel pn" id="sl"></div>
+    <h2 class="h2">What each rank can do</h2><div class="panel pn"><table><tr><th></th>${Object.keys(d.ranks).map(r=>`<th>${r}</th>`).join('')}</tr>${Object.keys(permLabel).map(p=>`<tr><td>${permLabel[p]}</td>${Object.values(d.ranks).map(ps=>`<td>${ps.includes(p)?'&#10003;':''}</td>`).join('')}</tr>`).join('')}</table></div>`});
+  if(!$('#sl'))return;
+  const draw=()=>{$('#sl').innerHTML=d.staff.map(s=>`<div class="arow"><div class="grow"><b>${esc(s.name)}</b><small>${esc(s.id)}</small></div><select data-r="${s.id}" style="width:auto" aria-label="Rank">${opts(s.rank)}</select><button class="btn" data-x="${s.id}">Remove</button></div>`).join('')||'<p class="muted">No staff yet. Add a user ID above.</p>'};
+  draw();
+  $('#sa').onclick=async e=>{e.target.disabled=true;try{const r=await api('/api/admin/staff',{method:'POST',body:{userId:$('#si').value,rank:$('#sr').value}});d=await api('/api/admin/staff');draw();$('#si').value='';toast(`Added ${r.name}`)}catch(x){toast(x.message,1)}e.target.disabled=false};
+  $('#sl').onchange=async e=>{const id=e.target.dataset.r;if(!id)return;try{await api('/api/admin/staff',{method:'POST',body:{userId:id,rank:e.target.value}});toast('Rank updated')}catch(x){toast(x.message,1)}};
+  $('#sl').onclick=async e=>{const id=e.target.dataset.x;if(!id||!confirm('Remove this person from staff?'))return;try{await api('/api/admin/staff/'+id,{method:'DELETE'});d=await api('/api/admin/staff');draw();toast('Removed')}catch(x){toast(x.message,1)}};
+}
+async function AdmLog(){
+  await adm('Activity log','The last 50 actions taken in this admin panel.',async()=>{const d=await api('/api/admin/log');
+    return `<div class="panel pn">${d.length?`<table><tr><th>When</th><th>Who</th><th>Action</th><th>Detail</th></tr>${d.map(r=>`<tr><td>${new Date(r.at).toLocaleString()}</td><td>${esc(r.who)}</td><td>${esc(r.action)}</td><td>${esc(r.detail||'')}</td></tr>`).join('')}</table>`:'<p class="muted">Nothing has happened yet.</p>'}</div>`});
 }
 function AntiSpam(){
   const c=mods.modules.antispam;

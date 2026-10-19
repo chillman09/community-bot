@@ -44,3 +44,6 @@ These need the **Manage Roles** permission. Re-invite the bot from the dashboard
 
 ## Branding
 The bot name comes from the `BOT_NAME` variable (set it to `Kyro` in Railway). The dashboard logo is `public/logo.png` and the favicon is `public/favicon.png`. Upload `kyro-avatar.png` as the bot's avatar in the Discord Developer Portal (Bot tab).
+
+## Admin panel
+Only you (the user ID in `OWNER_ID`, default set in `src/admin.js`) and staff you add can open the Admin group in the sidebar. Ranks: helper (view), moderator (view, block), admin (view, block, premium, leave servers). Only the owner manages staff. Blocked servers are removed and can't re-add the bot; blocked users can't use the dashboard. Every action is written to the activity log.

@@ -5,6 +5,8 @@ import crypto from 'node:crypto';
 import { setupModeration, mountModeration, initModeration } from './moderation.js';
 import { setupFeatures, mountFeatures, initFeatures } from './features.js';
 import { setupSecurity } from './security.js';
+import { mountAdmin, setupAdmin, initAdmin, getRank, isBlacklisted } from './admin.js';
+process.on('unhandledRejection', (e) => console.error('Unhandled rejection:', e?.message || e));
 import { Client, GatewayIntentBits, EmbedBuilder, PermissionFlagsBits, ChannelType } from 'discord.js';
 
 const { DISCORD_TOKEN, CLIENT_ID, CLIENT_SECRET, BASE_URL, SESSION_SECRET, DATABASE_URL, PORT = 3000, BOT_NAME = 'Kyro' } = process.env;
@@ -103,10 +105,11 @@ app.get('/api/me', async (req, res) => {
     if (canManage(m)) guilds.push({ id: g.id, name: g.name, icon: g.iconURL({ size: 64 }) });
   }
   const { uid, name, avatar } = req.session;
-  res.json({ ...base, guilds, user: { name, avatar: avatar ? `https://cdn.discordapp.com/avatars/${uid}/${avatar}.png?size=64` : null } });
+  res.json({ ...base, admin: await getRank(db, uid), guilds, user: { name, avatar: avatar ? `https://cdn.discordapp.com/avatars/${uid}/${avatar}.png?size=64` : null } });
 });
 
 async function guard(req, res, next) {
+  if (await isBlacklisted(db, 'user', req.session?.uid)) return res.status(403).json({ error: 'Your account is blocked from this dashboard.' });
   const guild = client.guilds.cache.get(req.params.id);
   const member = guild && req.session?.uid && await guild.members.fetch(req.session.uid).catch(() => null);
   if (!canManage(member)) return res.status(403).json({ error: 'You need the Manage Server permission in this server.' });
@@ -143,10 +146,13 @@ setupModeration(client, db);
 mountFeatures(app, guard, db);
 setupFeatures(client, db);
 setupSecurity(client, db);
+mountAdmin(app, client, db);
+setupAdmin(client, db);
 await db.query(`create table if not exists guild_settings (
   guild_id text primary key, premium boolean not null default false,
   welcome jsonb not null default '{}', updated_at timestamptz not null default now())`);
 await initModeration(db);
 await initFeatures(db);
+await initAdmin(db);
 await client.login(DISCORD_TOKEN);
 app.listen(PORT, () => console.log(`Dashboard on :${PORT}`));
