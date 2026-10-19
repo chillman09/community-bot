@@ -29,3 +29,10 @@ The bot's invite link now asks for Kick, Ban and Timeout permissions. If the bot
 - **Auto-roles:** roles given on join.
 - **Anti-spam:** times out members who send too many messages too fast. Staff with Manage Messages are ignored.
 These need the **Manage Roles** permission. Re-invite the bot from the dashboard, or tick it on the bot's role, and keep the bot's role above any role it hands out.
+
+## Text commands (prefix), security, auto-roles
+- **Text commands** like `?help` need the privileged **Message Content Intent**: enable it in the Developer Portal (Bot tab), then add the Railway variable `MESSAGE_CONTENT=true`. Each server picks its own prefix in the dashboard (Commands page). Without the variable, slash commands still work.
+- **Slash commands:** the bot logs `Registered N slash commands` on startup. If it logs `Slash command registration failed`, read the message that follows.
+- **Security:** anti-nuke, anti-raid, minimum account age, unauthorized-bot removal and a whitelist. Needs **View Audit Log**. Alerts go to the moderation log channel.
+- **Auto-roles:** give a role to everyone, or to one member, from the dashboard. You can only hand out roles below your own highest role.
+- The invite link was updated again (adds the `applications.commands` scope plus View Audit Log and Manage Messages). Re-invite the bot to refresh permissions.

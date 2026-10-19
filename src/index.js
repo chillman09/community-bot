@@ -4,13 +4,14 @@ import pg from 'pg';
 import crypto from 'node:crypto';
 import { setupModeration, mountModeration, initModeration } from './moderation.js';
 import { setupFeatures, mountFeatures, initFeatures } from './features.js';
+import { setupSecurity } from './security.js';
 import { Client, GatewayIntentBits, EmbedBuilder, PermissionFlagsBits, ChannelType } from 'discord.js';
 
 const { DISCORD_TOKEN, CLIENT_ID, CLIENT_SECRET, BASE_URL, SESSION_SECRET, DATABASE_URL, PORT = 3000, BOT_NAME = 'Beacon' } = process.env;
 
 const local = /localhost|railway\.internal/.test(DATABASE_URL || '');
 const db = new pg.Pool({ connectionString: DATABASE_URL, ssl: local ? false : { rejectUnauthorized: false } });
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessages] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildModeration, ...(process.env.MESSAGE_CONTENT === 'true' ? [GatewayIntentBits.MessageContent] : [])] });
 
 /* ---------- welcome settings ---------- */
 const DEFAULT = {
@@ -94,7 +95,7 @@ app.get('/auth/logout', (req, res) => { req.session = null; res.redirect('/'); }
 const canManage = (m) => m?.permissions.has(PermissionFlagsBits.ManageGuild);
 
 app.get('/api/me', async (req, res) => {
-  const base = { botName: BOT_NAME, invite: `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=bot&permissions=1099780082694` };
+  const base = { botName: BOT_NAME, invite: `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=bot%20applications.commands&permissions=1099780091014` };
   if (!req.session?.uid) return res.json({ ...base, user: null });
   const guilds = [];
   for (const g of client.guilds.cache.values()) {
@@ -141,6 +142,7 @@ mountModeration(app, guard, db);
 setupModeration(client, db);
 mountFeatures(app, guard, db);
 setupFeatures(client, db);
+setupSecurity(client, db);
 await db.query(`create table if not exists guild_settings (
   guild_id text primary key, premium boolean not null default false,
   welcome jsonb not null default '{}', updated_at timestamptz not null default now())`);

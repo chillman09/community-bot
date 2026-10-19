@@ -20,7 +20,10 @@ export const initModeration = (db) => db.query(`
   create index if not exists warnings_guild on warnings (guild_id, user_id)`);
 
 export function setupModeration(client, db) {
-  client.once('ready', () => client.application.commands.set([...commands, ...featureCommands]).catch((e) => console.error('command sync failed', e.message)));
+  client.once('ready', async () => {
+    try { const all = [...commands, ...featureCommands]; await client.application.commands.set(all); console.log(`Registered ${all.length} slash commands`); }
+    catch (e) { console.error('Slash command registration failed:', e.message, e.rawError ? JSON.stringify(e.rawError).slice(0, 600) : ''); }
+  });
 
   client.on('interactionCreate', async (i) => {
     if (!i.isChatInputCommand() || !i.inGuild() || !commands.some((c) => c.name === i.commandName)) return;
